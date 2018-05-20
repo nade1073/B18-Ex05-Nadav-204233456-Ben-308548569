@@ -86,6 +86,11 @@
                 m_Soldiers = value;
             }
         }
+        
+        public static bool isNadavGever()
+        {
+            return true;
+        }
 
         public static bool isPlayerNameValid(String i_PlayerName)
         {
@@ -96,6 +101,11 @@
             }
 
             if (i_PlayerName.Contains(" "))
+            {
+                isProperName = false;
+            }
+
+            if (string.IsNullOrEmpty(i_PlayerName))
             {
                 isProperName = false;
             }

@@ -72,7 +72,7 @@
 
         public void startGame()
         {
-            initializeStartCheckerBoard();
+            
             while (m_GameEndChoice == eGameEndChoice.Continue)
             {
                 while (m_GameStatus == eGameStatus.ContinueGame)
@@ -178,22 +178,18 @@
             return cloneSoldiers;
         }
 
-        private void initializeStartCheckerBoard()
+        public void initializeCheckerBoard(string i_FirstPlayerName,string i_SecondPlayerName,eSizeBoard i_SizeOfBoard)
         {
-            String firstPlayerName, secondPlayerName;
-            eSizeBoard sizeOfBoard;
-            UIUtilities.getClientNamesAndTypeOfSecondPlayer(out firstPlayerName, out secondPlayerName, out sizeOfBoard);
-            m_CurrentPlayer = new Player(firstPlayerName, eTypeOfPlayer.Human, eNumberOfPlayer.First, sizeOfBoard);
-            m_SizeOfBoard = sizeOfBoard;
-            if (secondPlayerName == null)
+            m_CurrentPlayer = new Player(i_FirstPlayerName, eTypeOfPlayer.Human, eNumberOfPlayer.First, i_SizeOfBoard);
+            m_SizeOfBoard = i_SizeOfBoard;
+            if (i_SecondPlayerName == null)
             {
-                m_OtherPlayer = new Player(Player.k_computerName, eTypeOfPlayer.Computer, eNumberOfPlayer.Second, sizeOfBoard);
+                m_OtherPlayer = new Player(Player.k_computerName, eTypeOfPlayer.Computer, eNumberOfPlayer.Second, i_SizeOfBoard);
             }
             else
             {
-                m_OtherPlayer = new Player(secondPlayerName, eTypeOfPlayer.Human, eNumberOfPlayer.Second, sizeOfBoard);
+                m_OtherPlayer = new Player(i_SecondPlayerName, eTypeOfPlayer.Human, eNumberOfPlayer.Second, i_SizeOfBoard);
             }
-
             m_MovmentOption = new MovementOptions(m_SizeOfBoard);
         }
 

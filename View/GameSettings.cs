@@ -31,22 +31,45 @@ namespace View
         }
 
         private void DoneButton_Click(object sender, System.EventArgs e)
-        {        
-            bool isFirstPlayerHasValidName = Player.isPlayerNameValid(PlayerOneTextBox.Text);
+        {
+            string firstName = PlayerOneTextBox.Text;
+            string secondName = null;   
+            bool isFirstPlayerHasValidName = Player.isPlayerNameValid(firstName);
             CheckState eCheckStateOfCheckBox = CheckBoxOfPlayerTwo.CheckState;
             bool isSecondPlayerHasValidName = true;
             if (CheckState.Checked== eCheckStateOfCheckBox)
             {
-                isSecondPlayerHasValidName = Player.isPlayerNameValid(PlayerTwoTextBox.Text);
+                secondName = PlayerTwoTextBox.Text;
+                isSecondPlayerHasValidName = Player.isPlayerNameValid(secondName);
             }
-            if(isSecondPlayerHasValidName && isSecondPlayerHasValidName)
-            {
+          //  if(isFirstPlayerHasValidName && isSecondPlayerHasValidName)
+           // {
+                eSizeBoard sizeOfBoard;
+                if(this.SixSize.Checked)
+                {
+                    sizeOfBoard = eSizeBoard.Six;
+                }
+                else if(this.EightSize.Checked)
+                {
+                    sizeOfBoard = eSizeBoard.Eight;
+                }
+                else
+                {
+                    sizeOfBoard = eSizeBoard.Ten;
+                }
 
-            }
-            else
-            {
-               
-            }
+                this.Hide();
+                CheckerBoard board = new CheckerBoard();
+                board.initializeCheckerBoard("Nadav", "Shalev", sizeOfBoard);
+                ViewCheckerBoard viewBoard = new ViewCheckerBoard(board);
+                viewBoard.ShowDialog();
+                this.Close();         
+            //}
+            //else
+            //{
+            //    ErrorWindow errorForm = new ErrorWindow();
+            //    errorForm.ShowDialog();
+            //}
         }
     }
 }
