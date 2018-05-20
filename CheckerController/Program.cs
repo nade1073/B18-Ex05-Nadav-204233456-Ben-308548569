@@ -1,6 +1,6 @@
-﻿namespace Program
+﻿namespace Controller
 {
-    public class Program
+    public class Controller
     {
         public static void Main()
         {

@@ -1,4 +1,4 @@
-﻿namespace Program
+﻿namespace Controller
 {
     public class MovementOptions
     {

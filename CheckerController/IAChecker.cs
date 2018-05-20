@@ -1,4 +1,4 @@
-﻿namespace Program
+﻿namespace Controller
 {
     using System;
     using System.Collections.Generic;
