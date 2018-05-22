@@ -62,16 +62,14 @@ namespace View
             this.Controls.Add(firstPlayer);
             this.Controls.Add(secondPlayer);
 
-
-
-
-
+           
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImage = Properties.Resources.wooden_background_3217987_1920;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;   
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 
+     
 
             this.Controls.Add(this.CloseButton);
             this.Cursor = System.Windows.Forms.Cursors.Arrow;
@@ -81,6 +79,8 @@ namespace View
             this.Text = "CheckerBoard";
             this.ResumeLayout(false);
 
+         
+
         }
 
         #endregion
@@ -88,36 +88,50 @@ namespace View
         private System.Windows.Forms.PictureBox CloseButton;
         private System.Windows.Forms.PictureBox pictureBox1;
         private PictureBox testPic;
-        private PictureBox m_Picture;
+
+    
         private void generateBoardSquares()
         {
             int size = (int)m_Board.SizeBoard;
-           
+            int indexToDrawTheSolider;
             int X = 150;
             int Y = 100+20;
             Point pointToDraw = new Point(X, Y);
             Bitmap ImageToLoad;
+            Image SoliderToDraw=null;
+            bool isDrawSolider = false;
             for (int i=0;i<size;i++)
             {
                 if(i%2==0)
                 {
                     ImageToLoad = Properties.Resources.WhiteSquare;
                     ImageToLoad.Tag = new TagName("White");
+                    indexToDrawTheSolider = 1;
                 }
                 else
                 {
                     ImageToLoad = Properties.Resources.BrownSquare;
                     ImageToLoad.Tag = new TagName("Brown");
+                    indexToDrawTheSolider = 0;
                 }
                 pointToDraw.X = X;
                 if (i != 0)
                 {
                     pointToDraw.Y += sizeOfSquareInBoard;
                 }
-                for(int j=0;j<size;j++)
+
+                if ((i < (size / 2) - 1))
                 {
-                   
-                    
+                    SoliderToDraw = Properties.Resources.BrownSolider;
+                    isDrawSolider = true;
+                }
+                else if (i >= (size / 2) + 1)
+                {
+                    SoliderToDraw = Properties.Resources.WhiteSolider;
+                    isDrawSolider = true;
+                }
+                for (int j=0;j<size;j++)
+                {                   
                     PictureBox squareBoard = new PictureBox();
                     if(j!=0)
                     {
@@ -125,14 +139,29 @@ namespace View
                         swapImages(ref ImageToLoad);
                     }
                     squareBoard.BackgroundImage = ImageToLoad;
+                    squareBoard.SendToBack();
                     squareBoard.BackgroundImageLayout =ImageLayout.Stretch;
                     squareBoard.Location = pointToDraw;
                     squareBoard.Name = string.Format("{0}{1}",X,Y);
                     squareBoard.Size = new Size(sizeOfSquareInBoard, sizeOfSquareInBoard);
                     squareBoard.TabStop = false;
+                    if (isDrawSolider)
+                    {
+                        if (j == indexToDrawTheSolider)
+                        {
+
+                            OvalPictureBox solider = new OvalPictureBox(SoliderToDraw);
+                            solider.Location = new Point(pointToDraw.X + 2, pointToDraw.Y + 2);
+                            this.Controls.Add(solider);
+                            solider.BringToFront();
+                            indexToDrawTheSolider += 2;
+                        }
+                       
+                    }
                     this.Controls.Add(squareBoard);
                 }
-            }
+                isDrawSolider = false;
+            } 
         }
         private void generateClientSize()
         {

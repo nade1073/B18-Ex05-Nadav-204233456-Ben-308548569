@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SoliderPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PictureBoxWithText.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -171,6 +174,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Puzzle-Game.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Drauts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BrownSolider.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BrownSolider.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WhiteSolider.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

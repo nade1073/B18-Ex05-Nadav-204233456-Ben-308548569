@@ -24,6 +24,7 @@ namespace View
         {
             m_Picture = new PictureBox();
             m_Picture.BackgroundImage = m_Image;
+            m_Picture.SendToBack();
             m_Picture.BackColor = Color.Transparent;
             m_Picture.BackgroundImageLayout = ImageLayout.Stretch;
             m_Picture.SizeMode = PictureBoxSizeMode.StretchImage;
