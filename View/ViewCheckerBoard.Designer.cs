@@ -45,25 +45,24 @@ namespace View
             this.CloseButton.BackColor = Color.Transparent;
             this.CloseButton.BackgroundImage = Properties.Resources.CloseWoodenButton;
             this.CloseButton.BackgroundImageLayout = ImageLayout.Zoom;
-            this.CloseButton.BorderStyle = BorderStyle.FixedSingle;
-            this.CloseButton.Cursor = System.Windows.Forms.Cursors.Hand;   
+            
+            this.CloseButton.Cursor =Cursors.Hand;   
             this.CloseButton.Location = new Point(ClientSize.Width-40,0);
             this.CloseButton.Name = "CloseButton";
             this.CloseButton.Size = new System.Drawing.Size(39, 32);
-            this.CloseButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CloseButton.SizeMode = PictureBoxSizeMode.StretchImage;
             this.CloseButton.TabIndex = 0;
             this.CloseButton.TabStop = false;
             this.CloseButton.Click += new System.EventHandler(this.pictureBox1_Click);
-            //
-            //Labels
-            //
-            PictureBox FirstPlayerPictureLabel = new PictureBox();
-            FirstPlayerPictureLabel.BackgroundImage = Properties.Resources.WoodenLabel;
-            FirstPlayerPictureLabel.Location=new Point(0, 0);
-            FirstPlayerPictureLabel.Size = new Size(40, 40);
-            
-            this.Controls.Add(FirstPlayerPictureLabel);
-            
+
+            PictureBoxWithText firstPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("Player 1: {0}", m_Board.CurrentPlayer.PlayerName));
+            PictureBoxWithText secondPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("Player 2: {0}", m_Board.OtherPlayer.PlayerName));
+            firstPlayer.Location = new Point(70, 20);
+            secondPlayer.Location = new Point(ClientSize.Width-250, 20);
+            this.Controls.Add(firstPlayer);
+            this.Controls.Add(secondPlayer);
+
+
 
 
 
@@ -89,7 +88,7 @@ namespace View
         private System.Windows.Forms.PictureBox CloseButton;
         private System.Windows.Forms.PictureBox pictureBox1;
         private PictureBox testPic;
-
+        private PictureBox m_Picture;
         private void generateBoardSquares()
         {
             int size = (int)m_Board.SizeBoard;

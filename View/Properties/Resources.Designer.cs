@@ -101,6 +101,16 @@ namespace View.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Puzzle_Game {
+            get {
+                object obj = ResourceManager.GetObject("Puzzle_Game", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap SignError {
@@ -133,9 +143,9 @@ namespace View.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap WoodenLabel {
+        internal static System.Drawing.Bitmap WoodenForLabel {
             get {
-                object obj = ResourceManager.GetObject("WoodenLabel", resourceCulture);
+                object obj = ResourceManager.GetObject("WoodenForLabel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

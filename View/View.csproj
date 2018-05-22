@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PictureBoxWithText.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ViewCheckerBoard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,7 +167,10 @@
     <None Include="Resources\Background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\WoodenLabel.jpg" />
+    <None Include="Resources\WoodenForLabel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Puzzle-Game.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
