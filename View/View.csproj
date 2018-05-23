@@ -71,12 +71,6 @@
     <Compile Include="PictureBoxWithText.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ViewCheckerBoard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ViewCheckerBoard.Designer.cs">
-      <DependentUpon>ViewCheckerBoard.cs</DependentUpon>
-    </Compile>
     <Compile Include="ErrorWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,9 +85,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ViewCheckerBoard.resx">
-      <DependentUpon>ViewCheckerBoard.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ErrorWindow.resx">
       <DependentUpon>ErrorWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -120,6 +111,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="CheckerboardForm.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

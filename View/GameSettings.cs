@@ -59,9 +59,8 @@ namespace View
                 }
 
                 this.Hide();
-                CheckerBoard board = new CheckerBoard();
-                board.initializeCheckerBoard("Nadav", "Shalev", sizeOfBoard);
-                ViewCheckerBoard viewBoard = new ViewCheckerBoard(board);
+			    CheckerboardController.Instance.initializeCheckerBoard("Nadav", "Shalev", sizeOfBoard);
+			    CheckerBoardForm viewBoard = new CheckerBoardForm();
                 viewBoard.ShowDialog();
                 this.Close();         
             //}
