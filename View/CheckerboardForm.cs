@@ -195,15 +195,15 @@ namespace View
 
         private void initializeEventHandlers()
         {
-            initializeEvenetForAllSoldiers();
+            initializeEventForPlayer(CheckerboardController.Instance.CurrentPlayer);
+            initializeEventForPlayer(CheckerboardController.Instance.OtherPlayer);
         }
 
-        private void initializeEvenetForAllSoldiers()
-        {
-            List<Soldier> allSolidersInBoard = CheckerboardController.Instance.CurrentPlayer.Soldiers;
-            allSolidersInBoard.AddRange(CheckerboardController.Instance.OtherPlayer.Soldiers);
 
-            foreach (Soldier currentSoldier in allSolidersInBoard)
+
+        private void initializeEventForPlayer(Player i_Player)
+        {
+            foreach (Soldier currentSoldier in i_Player.Soldiers)
             {
                 currentSoldier.ChangePlaceOnBoardEventHandler += this.solider_ChangePlaceOnBoard;
                 currentSoldier.ChangeTypeOfSolider += this.solider_ChangeType;
