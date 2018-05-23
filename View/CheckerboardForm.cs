@@ -255,7 +255,7 @@ namespace View
 			{
 				currentSoldier.ChangePlaceOnBoardEventHandler += this.solider_ChangePlaceOnBoard;
 				currentSoldier.ChangeTypeOfSolider += this.solider_ChangeType;
-				currentSoldier.RemoveSolider += solider_RemoveFromBoard;
+				currentSoldier.RemoveSolider += this.solider_RemoveFromBoard;
 			}
 		}
         
@@ -268,7 +268,7 @@ namespace View
 			//NEED TO IMPLEMENT!! change the place of solider
 		}
 
-		private void solider_RemoveFromBoard(Square i_PlaceOnBoardToRemoveSolider)
+		private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
 		{
 			//Need to Implement to remove the player from board
 		}

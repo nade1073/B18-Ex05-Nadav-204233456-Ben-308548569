@@ -80,7 +80,7 @@
                 {
                     System.Console.Clear();
                     UIUtilities.PrintBoard(m_CurrentPlayer, m_OtherPlayer, (int)m_SizeOfBoard);
-                    nextTurn();
+                    //nextTurn();
                     setParamatersForNextTurn();
                 }
 

@@ -14,7 +14,7 @@
         private Square m_PlaceOnBoard;
 		public event Action<Square, Square> ChangePlaceOnBoardEventHandler;
 		public event Action<Soldier> ChangeTypeOfSolider;
-		public event Action<Square> RemoveSolider;
+		public event Action<Soldier> RemoveSolider;
 
         public Soldier(char i_CharRepresent, Square i_PlaceOnBoard, eSoldierType i_TypeOfSolider = eSoldierType.Regular)
         {
@@ -92,9 +92,8 @@
             }
         }
 
-		protected virtual void OnRemovePlayer(Square i_PlaceOfSoldierToMove)
+		protected virtual void OnRemovePlayer()
         {
-            m_TypeOfSoldier = i_TypeOfSolider;
 			if (RemoveSolider != null)
             {
 				RemoveSolider.Invoke(this);
