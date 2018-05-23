@@ -72,7 +72,13 @@
             }
         }
 
-		protected virtual void OnChangePlaceOnBoard(Square i_SquareToChange)
+        public void invokeRemoveSolider()
+        {
+            OnRemoveSolider();
+        }
+
+
+        protected virtual void OnChangePlaceOnBoard(Square i_SquareToChange)
         {
 			Square oldSquare = m_PlaceOnBoard;
 			Square newSquare = i_SquareToChange;
@@ -92,7 +98,7 @@
             }
         }
 
-		protected virtual void OnRemovePlayer()
+		protected virtual void OnRemoveSolider()
         {
 			if (RemoveSolider != null)
             {

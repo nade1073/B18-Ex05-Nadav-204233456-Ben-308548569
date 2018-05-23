@@ -142,14 +142,14 @@
             return validMoves;
         }
 
-        internal void perfomSoliderAction(SquareMove i_PlayerChoise)
+        internal void perfomSoliderAction(SquareMove i_PlayerChoise) 
         {
             foreach (Soldier currentSoldier in m_CurrentPlayer.Soldiers)
             {
                 if (currentSoldier.PlaceOnBoard.Equals(i_PlayerChoise.FromSquare))
                 {
                     currentSoldier.PlaceOnBoard = i_PlayerChoise.ToSquare;
-                    UIUtilities.setCurrentMove(m_CurrentPlayer.PlayerName, currentSoldier.CharRepresent, i_PlayerChoise);
+                    //UIUtilities.setCurrentMove(m_CurrentPlayer.PlayerName, currentSoldier.CharRepresent, i_PlayerChoise);
                     checkAndSetKingSolider(currentSoldier);
                     m_SoliderThatNeedToEatNextTurn = null;
                     break;
@@ -232,13 +232,17 @@
             {               
                 initializeForMustMoves(availableVaildMoves, ref mustToDoMoves);
 				SquareMove playerChoise = generateSquareToMove(availableVaildMoves, mustToDoMoves,i_SquareToMove);
-               // if (playerChoise == null)
-               // {
-               //     m_GameStatus = eGameStatus.QExit;
-              //  }
-              //  else
-               // {
+                // if (playerChoise == null)
+                // {
+                //     m_GameStatus = eGameStatus.QExit;
+                //  }
+                //  else
+                // {
+                if (playerChoise != null)
+                {
                     perfomSoliderAction(playerChoise);
+                    setParamatersForNextTurn();
+                }
                //}
             }
         }

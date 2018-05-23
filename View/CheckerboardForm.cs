@@ -8,17 +8,15 @@ namespace View
 {
 	public class CheckerBoardForm : Form
 	{
-
         //** Need to implement Handle ResultOfGame
 		private const int k_SizeOfSquareInBoard = 50;
-		private SquareMove m_CurrentMove;
-		private bool m_IsChooseSolider = false;
+        private SquareMove m_CurrentMove = new SquareMove();
+        private bool m_IsChooseSolider = false;
 
 		public CheckerBoardForm()
 		{
 			initializeComponent();
 			initializeEventHandlers();
-            
 		}
 
 		private void initializeComponent()
@@ -28,9 +26,6 @@ namespace View
 
 			//CloseButton
 			generateCloseButton();
-
-			//Check what is this?
-			this.SuspendLayout();
 
 			//Checkerboard + Soliders
 			generateBoardSquaresAndSoliders();
@@ -44,7 +39,6 @@ namespace View
 			//SomeOtherProporties         
 			this.AutoScaleMode = AutoScaleMode.Font;
 			this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			//this.BackColor = System.Drawing.Color.White;
 			this.BackgroundImage = Properties.Resources.wooden_background_3217987_1920;
 			this.BackgroundImageLayout = ImageLayout.Stretch;
 			this.Cursor = Cursors.Arrow;
@@ -90,8 +84,6 @@ namespace View
 		{
 			int sizeOfBoard = (int)CheckerboardController.Instance.SizeBoard;
 			int indexToDrawTheSolider = 1;
-            //int startingPointX = 150;
-            //int startingPointY = 120;
             int startingPointX = 150;
             int startingPointY = 70;
             eNumberOfPlayer numberOfPlayer = eNumberOfPlayer.First;
@@ -134,7 +126,6 @@ namespace View
 					}
                 }
                 isDrawSolider = false;
-                
 			}
         }
 
@@ -142,7 +133,7 @@ namespace View
 		{
 			OvalPictureBox solider = new OvalPictureBox(i_SoliderToDraw);
 			solider.Location = new Point(i_PointToDraw.X + 2, i_PointToDraw.Y + 2);
-			string stringToSetToTagName = String.Format("{0}{1}", MovementOptions.k_StartCol + i_Col, MovementOptions.k_StartRow + i_Row);
+            string stringToSetToTagName = String.Format("{0}{1}", (char)(MovementOptions.k_StartCol + i_Col), (char)(MovementOptions.k_StartRow + i_Row));
 			solider.Tag = new TagSolider(stringToSetToTagName,i_NumberOfPlayer);
 			solider.MouseClick += Solider_MouseClick;
 			this.Controls.Add(solider);
@@ -172,13 +163,11 @@ namespace View
 			squareBoard.Size = new Size(k_SizeOfSquareInBoard, k_SizeOfSquareInBoard);
 			squareBoard.TabStop = false;
 			squareBoard.MouseClick += SquareBoard_MouseClick;
-			string stringToSetToTagName = String.Format("{0}{1}", MovementOptions.k_StartCol + i_Col, MovementOptions.k_StartRow + i_Row);
+			string stringToSetToTagName = String.Format("{0}{1}", (char)(MovementOptions.k_StartCol + i_Col),(char)(MovementOptions.k_StartRow + i_Row));
 			squareBoard.Tag = new TagName(stringToSetToTagName);
 			this.Controls.Add(squareBoard);
 			squareBoard.SendToBack();
 		}
-
-
 
 		private void swapImages(ref Bitmap i_CurrentImage)
 		{
@@ -198,13 +187,32 @@ namespace View
 				}
 			}
 		}
+
 		private void generateLocationLablesOfCheckerboard()
 		{
 			//NeedToImplement
 		}
 
-		//Listeners
-		private void closeButton_Click(object sender, EventArgs e)
+        private void initializeEventHandlers()
+        {
+            initializeEvenetForAllSoldiers();
+        }
+
+        private void initializeEvenetForAllSoldiers()
+        {
+            List<Soldier> allSolidersInBoard = CheckerboardController.Instance.CurrentPlayer.Soldiers;
+            allSolidersInBoard.AddRange(CheckerboardController.Instance.OtherPlayer.Soldiers);
+
+            foreach (Soldier currentSoldier in allSolidersInBoard)
+            {
+                currentSoldier.ChangePlaceOnBoardEventHandler += this.solider_ChangePlaceOnBoard;
+                currentSoldier.ChangeTypeOfSolider += this.solider_ChangeType;
+                currentSoldier.RemoveSolider += this.solider_RemoveFromBoard;
+            }
+        }
+
+        //Listeners
+        private void closeButton_Click(object sender, EventArgs e)
 		{
 			this.Dispose();
 		}
@@ -214,13 +222,11 @@ namespace View
 			OvalPictureBox currentSolider = sender as OvalPictureBox;
 			if (currentSolider != null)
 			{
-				TagSolider currentTagSolider = currentSolider.Tag as TagSolider; 
+				TagSolider currentTagSolider = currentSolider.Tag as TagSolider;
 				if(currentTagSolider.NumberOfPlayer==CheckerboardController.Instance.CurrentPlayer.NumberOfPlayer)
 				{
-					//Brush(Border) the current solideer with whiteColor--https://stackoverflow.com/questions/4446478/how-do-i-create-a-colored-border-on-a-picturebox-control
-                    TagName currentPositionOfCurrentSolider = currentSolider.Tag as TagName;
-                    this.m_CurrentMove.FromSquare.Col = currentPositionOfCurrentSolider.Name[0];
-                    this.m_CurrentMove.FromSquare.Row = currentPositionOfCurrentSolider.Name[1];
+                    //Brush(Border) the current solideer with whiteColor--https://stackoverflow.com/questions/4446478/how-do-i-create-a-colored-border-on-a-picturebox-control
+                    this.m_CurrentMove.FromSquare = new Square(currentTagSolider.Name[1], currentTagSolider.Name[0]);
                     this.m_IsChooseSolider = true;	
 				}
 
@@ -235,35 +241,18 @@ namespace View
 				if (currentSquare != null)
 				{
 					TagName currentPositionOfCurrentSolider = currentSquare.Tag as TagName;
-					this.m_CurrentMove.ToSquare.Col = currentPositionOfCurrentSolider.Name[0];
-					this.m_CurrentMove.ToSquare.Row = currentPositionOfCurrentSolider.Name[1];
+                    this.m_CurrentMove.ToSquare = new Square(currentPositionOfCurrentSolider.Name[1], currentPositionOfCurrentSolider.Name[0]);
 					CheckerboardController.Instance.nextTurn(m_CurrentMove);
 				}
 				this.m_IsChooseSolider = false;
 			}
 		}
 
-		private void initializeEventHandlers()
-		{
-			initializeEvenetForAllPlayers();
-		}
-
-		private void initializeEvenetForAllPlayers()
-		{
-			List<Soldier> allSolidersInBoard = CheckerboardController.Instance.CurrentPlayer.Soldiers;
-			allSolidersInBoard.AddRange(CheckerboardController.Instance.OtherPlayer.Soldiers);
-			foreach(Soldier currentSoldier in allSolidersInBoard)
-			{
-				currentSoldier.ChangePlaceOnBoardEventHandler += this.solider_ChangePlaceOnBoard;
-				currentSoldier.ChangeTypeOfSolider += this.solider_ChangeType;
-				currentSoldier.RemoveSolider += this.solider_RemoveFromBoard;
-			}
-		}
-        
 		private void solider_ChangeType(Soldier i_Soldier)
 		{
 			//Need  To Implement to King change on view!!!
 		}
+
         private void solider_ChangePlaceOnBoard(Square i_OldSquare,Square i_NewSquare)
 		{
 			//NEED TO IMPLEMENT!! change the place of solider
@@ -277,11 +266,13 @@ namespace View
 		//classes
 		private class TagName
 		{
-			public String m_String;
+			private String m_String;
+
 			public TagName(String i_setName)
 			{
 				Name = i_setName;
 			}
+
 			public String Name
 			{
 				get
