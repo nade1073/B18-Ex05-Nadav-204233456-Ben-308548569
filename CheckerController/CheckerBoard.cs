@@ -19,6 +19,7 @@
         {
         }
 
+
         public CheckerBoard(CheckerBoard i_CloneToThisBoard)
         {
             Player otherFirstPlayer = i_CloneToThisBoard.m_CurrentPlayer;
@@ -219,7 +220,7 @@
             }
         }
 
-        private void nextTurn()
+		public void nextTurn(SquareMove i_SquareToMove)
         {
             List<SquareMove> mustToDoMoves = new List<SquareMove>();
             List<SquareMove> availableVaildMoves = generateValidMovesOfPlayer(m_CurrentPlayer);
@@ -230,24 +231,24 @@
             else
             {               
                 initializeForMustMoves(availableVaildMoves, ref mustToDoMoves);
-                SquareMove playerChoise = generateSquareToMove(availableVaildMoves, mustToDoMoves);
-                if (playerChoise == null)
-                {
-                    m_GameStatus = eGameStatus.QExit;
-                }
-                else
-                {
+				SquareMove playerChoise = generateSquareToMove(availableVaildMoves, mustToDoMoves,i_SquareToMove);
+               // if (playerChoise == null)
+               // {
+               //     m_GameStatus = eGameStatus.QExit;
+              //  }
+              //  else
+               // {
                     perfomSoliderAction(playerChoise);
-                }
+               //}
             }
         }
 
-        private SquareMove generateSquareToMove(List<SquareMove> i_AvailableVaildMoves, List<SquareMove> i_MustToDoMoves)
+		private SquareMove generateSquareToMove(List<SquareMove> i_AvailableVaildMoves, List<SquareMove> i_MustToDoMoves,SquareMove i_SquareToMove=null)
         {
             SquareMove playerChoise;
             if (m_CurrentPlayer.TypeOfPlayer == eTypeOfPlayer.Human)
             {
-                playerChoise = generateSquareToMoveHuman(m_CurrentPlayer, m_SizeOfBoard, i_AvailableVaildMoves, i_MustToDoMoves);
+				playerChoise = generateSquareToMoveHuman(m_CurrentPlayer, m_SizeOfBoard, i_AvailableVaildMoves, i_MustToDoMoves,i_SquareToMove);
             }
             else
             {
@@ -283,29 +284,32 @@
             return m_LogicIaCheckerGame.IACheckerCalculateNextMove(this, avalibaleMovmenetsToCalculate);
         }
 
-        private SquareMove generateSquareToMoveHuman(Player i_CurrentPlayer, eSizeBoard i_SizeOfBoard, List<SquareMove> i_AvaiableVaildMoves, List<SquareMove> i_MustToDoMoves)
+        private SquareMove generateSquareToMoveHuman(Player i_CurrentPlayer, eSizeBoard i_SizeOfBoard, List<SquareMove> i_AvaiableVaildMoves, List<SquareMove> i_MustToDoMoves,SquareMove i_SquareToMove)
         {
             SquareMove moveFromClient = null;
             bool isValidMove = false;
-            while (!isValidMove)
-            {
-                moveFromClient = UIUtilities.getValidSquareToMoveFromClient(i_CurrentPlayer, i_SizeOfBoard);
-                if (moveFromClient == null)
-                {
-                    break;
-                }
+            //while (!isValidMove)
+            //{
+                //moveFromClient = UIUtilities.getValidSquareToMoveFromClient(i_CurrentPlayer, i_SizeOfBoard);
+                //if (moveFromClient == null)
+               // {
+                //    break;
+               // }
 
                 if (i_MustToDoMoves.Count > 0)
                 {
-                    isValidMove = i_MustToDoMoves.Contains(moveFromClient);
+					isValidMove = i_MustToDoMoves.Contains(i_SquareToMove);
                 }    
                 else
                 {
-                    isValidMove = i_AvaiableVaildMoves.Contains(moveFromClient);
+					isValidMove = i_AvaiableVaildMoves.Contains(i_SquareToMove);
                 }
-            }
-
-            return moveFromClient;
+           // }
+            if(isValidMove)
+			{
+				moveFromClient = i_SquareToMove;
+			}
+			return moveFromClient;
         }
 
         private void initializeForMustMoves(List<SquareMove> i_AvaiableVaildMoves, ref List<SquareMove> io_MustToDoMoves)

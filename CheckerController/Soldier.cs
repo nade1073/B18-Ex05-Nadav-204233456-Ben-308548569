@@ -12,11 +12,15 @@
         private char m_CharRepresent;
         private eSoldierType m_TypeOfSoldier;
         private Square m_PlaceOnBoard;
+		public event Action<Square, Square> ChangePlaceOnBoardEventHandler;
+		public event Action<Soldier> ChangeTypeOfSolider;
+		public event Action<Square> RemoveSolider;
 
         public Soldier(char i_CharRepresent, Square i_PlaceOnBoard, eSoldierType i_TypeOfSolider = eSoldierType.Regular)
         {
-            TypeOfSoldier = i_TypeOfSolider;
-            PlaceOnBoard = i_PlaceOnBoard;
+            m_TypeOfSoldier = i_TypeOfSolider;
+			//PlaceOnBoard = i_PlaceOnBoard;
+			m_PlaceOnBoard = i_PlaceOnBoard;
             CharRepresent = i_CharRepresent;
         }
 
@@ -49,7 +53,8 @@
 
             set
             {
-                m_TypeOfSoldier = value;
+				OnChangeTypeOfSolider(value);
+                //m_TypeOfSoldier = value;
             }
         }
 
@@ -62,7 +67,37 @@
 
             set
             {
-                m_PlaceOnBoard = value;
+				//m_PlaceOnBoard = value;
+				OnChangePlaceOnBoard(value);
+            }
+        }
+
+		protected virtual void OnChangePlaceOnBoard(Square i_SquareToChange)
+        {
+			Square oldSquare = m_PlaceOnBoard;
+			Square newSquare = i_SquareToChange;
+			m_PlaceOnBoard = i_SquareToChange;
+			if (ChangePlaceOnBoardEventHandler != null)
+            {
+				ChangePlaceOnBoardEventHandler.Invoke(oldSquare, newSquare);     
+            }
+        }
+
+		protected virtual void OnChangeTypeOfSolider(eSoldierType i_TypeOfSolider)
+        {
+			m_TypeOfSoldier = i_TypeOfSolider;
+			if (ChangeTypeOfSolider != null)
+            {
+				ChangeTypeOfSolider.Invoke(this);
+            }
+        }
+
+		protected virtual void OnRemovePlayer(Square i_PlaceOfSoldierToMove)
+        {
+            m_TypeOfSoldier = i_TypeOfSolider;
+			if (RemoveSolider != null)
+            {
+				RemoveSolider.Invoke(this);
             }
         }
 
