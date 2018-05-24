@@ -14,6 +14,7 @@ namespace View
         private const string k_SquarePicName = "Q";
         private SquareMove m_CurrentMove = new SquareMove();
         private bool m_IsChooseSolider = false;
+        private bool m_IsSoliderIsMovingRightNow = false;
 
 		public CheckerBoardForm()
 		{
@@ -155,6 +156,7 @@ namespace View
             solider.Name = string.Format("{0}{1}", stringToSetToTagName, k_SoliderPicName);
 			solider.Tag = new TagSolider(stringToSetToTagName,i_NumberOfPlayer);
 			solider.MouseClick += Solider_MouseClick;
+            solider.StopSoliderMoveEventHandler += solider_StopMove;
             this.Controls.Add(solider);
 			solider.BringToFront();
 		}
@@ -235,24 +237,32 @@ namespace View
 
 		private void Solider_MouseClick(object sender, MouseEventArgs e)
 		{
-			OvalPictureBox currentSolider = sender as OvalPictureBox;
-			if (currentSolider != null)
-			{
-                if(m_IsChooseSolider==true)
+            if(!m_IsSoliderIsMovingRightNow)
+            {
+                OvalPictureBox currentSolider = sender as OvalPictureBox;
+                if (currentSolider != null)
                 {
-                    removeBorderFromSoliderThatHaveBeenChosen();
-                    Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", m_CurrentMove.FromSquare.ToString(), k_SoliderPicName), false);
-                    soliderToMove[0].Invalidate();
-                }
-				TagSolider currentTagSolider = currentSolider.Tag as TagSolider;
-				if(currentTagSolider.NumberOfPlayer==CheckerboardController.Instance.CurrentPlayer.NumberOfPlayer)
-				{
-                    currentSolider.MakeBorder(currentSolider.CreateGraphics());
-                    this.m_CurrentMove.FromSquare = new Square(currentTagSolider.Name[1], currentTagSolider.Name[0]);
-                    this.m_IsChooseSolider = true;	
-				}
+                    if (m_IsChooseSolider == true)
+                    {
+                        removeBorderFromSoliderThatHaveBeenChosen();
+                        Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", m_CurrentMove.FromSquare.ToString(), k_SoliderPicName), false);
+                        soliderToMove[0].Invalidate();
+                    }
+                    TagSolider currentTagSolider = currentSolider.Tag as TagSolider;
+                    if (currentTagSolider.NumberOfPlayer == CheckerboardController.Instance.CurrentPlayer.NumberOfPlayer)
+                    {
+                        currentSolider.MakeBorder(currentSolider.CreateGraphics());
+                        this.m_CurrentMove.FromSquare = new Square(currentTagSolider.Name[1], currentTagSolider.Name[0]);
+                        this.m_IsChooseSolider = true;
+                    }
+                    else
+                    {
+                        this.m_IsChooseSolider = false;
+                    }
 
-			}
+                }
+            }
+			
 		}
 
         private void removeBorderFromSoliderThatHaveBeenChosen()
@@ -295,19 +305,24 @@ namespace View
             if(currentSolider!=null)
             {
                 Point newLocation = new Point(currentLocationOfSquare.X + 2, currentLocationOfSquare.Y + 2);
+                m_IsSoliderIsMovingRightNow = true;
                 currentSolider.startAnimationOfMovingSolider(newLocation);
             }
-            //$Add AnimationMove + sound
-            //soliderToMove[0].Location = new Point(currentLocationOfSquare.X + 2, currentLocationOfSquare.Y + 2);
             TagSolider tagOfCurrentSolider = soliderToMove[0].Tag as TagSolider;
             tagOfCurrentSolider.Name = i_NewSquare.ToString();
             soliderToMove[0].Name = String.Format("{0}{1}", i_NewSquare.ToString(), k_SoliderPicName);
 
         }
+
         private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
 		{
             Control[] soliderToRemove = this.Controls.Find(String.Format("{0}{1}", i_SoldierToRemove.PlaceOnBoard.ToString(), k_SoliderPicName), false);
             this.Controls.Remove(soliderToRemove[0]);
+        }
+
+        private void solider_StopMove(bool i_IsStopToMove)
+        {
+            m_IsSoliderIsMovingRightNow = i_IsStopToMove;
         }
 
 		//classes

@@ -9,6 +9,7 @@ namespace View
     {
         private Timer m_TimerOfMovingPic;
         private Point m_NewLocation;
+        public event Action<bool> StopSoliderMoveEventHandler;
 
         public OvalPictureBox(Image i_ImageToSet)
         {
@@ -59,6 +60,15 @@ namespace View
         private void doWhenReachToThePlace()
         {
             m_TimerOfMovingPic.Stop();
+            OnStopSoliderMove();
+        }
+
+        private void OnStopSoliderMove()
+        {
+            if(StopSoliderMoveEventHandler!=null)
+            {
+                StopSoliderMoveEventHandler.Invoke(false);
+            }
         }
 
         public void MakeBorder(Graphics e)
