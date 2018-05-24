@@ -111,7 +111,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="CheckerboardForm.cs" />
+    <Compile Include="CheckerboardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -171,13 +173,16 @@
     <None Include="Resources\Drauts.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\BrownSolider.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BrownSolider.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\WhiteSolider.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BlackKing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\BlackSolider.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WhiteKing.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

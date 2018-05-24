@@ -13,8 +13,8 @@ namespace View
 
         public OvalPictureBox(Image i_ImageToSet)
         {
-            this.BackColor = Color.DarkGray;
             this.BackgroundImage = i_ImageToSet;
+            this.BackColor = Color.Transparent;
             this.BackgroundImageLayout = ImageLayout.Stretch;
             this.Size = new Size(45, 45);
             this.m_TimerOfMovingPic = new Timer();
@@ -73,9 +73,9 @@ namespace View
 
         public void MakeBorder(Graphics e)
         {
-            float penWidth = 6F;
+            float penWidth = 4F;
             Pen myPen = new Pen(Color.FromArgb(255, 255, 255), penWidth);
-            e.DrawEllipse(myPen, new RectangleF(new PointF(0, 0), new SizeF((float)(this.Width - 1), this.Height - 1)));
+            e.DrawEllipse(myPen, new RectangleF(new PointF(3, 3), new SizeF((float)(this.Width - 7), this.Height - 7)));
             myPen.Dispose();
         }
 
@@ -84,7 +84,7 @@ namespace View
             base.OnResize(e);
             using (var gp = new GraphicsPath())
             {
-                gp.AddEllipse(new Rectangle(0, 0, this.Width - 1, this.Height - 1));
+                gp.AddEllipse(new Rectangle(3, 3, this.Width - 7, this.Height - 7));
                 this.Region = new Region(gp);
             }
         }     

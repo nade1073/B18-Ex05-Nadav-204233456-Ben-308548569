@@ -83,9 +83,19 @@ namespace View.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BrownSolider {
+        internal static System.Drawing.Bitmap BlackKing {
             get {
-                object obj = ResourceManager.GetObject("BrownSolider", resourceCulture);
+                object obj = ResourceManager.GetObject("BlackKing", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap BlackSolider {
+            get {
+                object obj = ResourceManager.GetObject("BlackSolider", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -126,6 +136,16 @@ namespace View.Properties {
         internal static System.Drawing.Bitmap SignError {
             get {
                 object obj = ResourceManager.GetObject("SignError", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WhiteKing {
+            get {
+                object obj = ResourceManager.GetObject("WhiteKing", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

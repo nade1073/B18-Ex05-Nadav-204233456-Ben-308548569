@@ -11,10 +11,11 @@
         private List<Soldier> m_Soldiers;
         private eTypeOfPlayer m_TypeOfPlayer;
         private eNumberOfPlayer m_NumberOfPlayer;
+        public event Action<Player> ScoreChangeEventHandler;
 
         public Player(String i_PlayerName, eTypeOfPlayer i_TypeOfPlayer, eNumberOfPlayer i_NumberOfPlayer, eSizeBoard i_BoardSize)
         {
-            Score = 0;
+            m_Score = 0;
             PlayerName = i_PlayerName;
             TypeOfPlayer = i_TypeOfPlayer;
             NumberOfPlayer = i_NumberOfPlayer;
@@ -58,6 +59,7 @@
             set
             {
                 m_Score = value;
+                OnScoreChange();
             }
         }
 
@@ -95,7 +97,7 @@
         public static bool isPlayerNameValid(String i_PlayerName)
         {
             bool isProperName = true;
-            if (i_PlayerName.Length > 20)
+            if (i_PlayerName.Length > 5)
             {
                 isProperName = false;
             }
@@ -223,5 +225,14 @@
                 i_startRow++;
             }
         }
+
+        private void OnScoreChange()
+        {
+            if(this.ScoreChangeEventHandler!=null)
+            {
+                ScoreChangeEventHandler.Invoke(this);
+            }
+        }
+
     }
 }

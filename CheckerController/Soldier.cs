@@ -77,7 +77,6 @@
             OnRemoveSolider();
         }
 
-
         protected virtual void OnChangePlaceOnBoard(Square i_SquareToChange)
         {
 			Square oldSquare = m_PlaceOnBoard;

@@ -12,6 +12,7 @@
         private MovementOptions m_MovmentOption;
         private IAChecker m_LogicIaCheckerGame;
         public event Action<eGameStatus> GameStausChange;
+        public event Action ComputerTurnEventHandler;
 
         private Soldier m_SoliderThatNeedToEatNextTurn;
 
@@ -221,22 +222,25 @@
 				SquareMove playerChoise = generateSquareToMove(availableVaildMoves, mustToDoMoves,i_SquareToMove);
                 if (playerChoise != null)
                 {
+                    eTypeOfPlayer currentTypeOfPlayer = m_CurrentPlayer.TypeOfPlayer;
                     perfomSoliderAction(playerChoise);
                     setParamatersForNextTurn();
+                    if(m_GameStatus==eGameStatus.ContinueGame)
+                    {
+                        if (currentTypeOfPlayer == eTypeOfPlayer.Computer && currentTypeOfPlayer == m_CurrentPlayer.TypeOfPlayer)
+                        {
+                            OnComputerTurn();
+                        }
+                    }
+
                 }
             }
-
-            //Move This TO UI!
-            //if (m_GameEndChoice == eGameEndChoice.Continue)
-            //{
-            //    initializeCheckerGame();
-            //}
         }
 
 		private SquareMove generateSquareToMove(List<SquareMove> i_AvailableVaildMoves, List<SquareMove> i_MustToDoMoves,SquareMove i_SquareToMove=null)
         {
             SquareMove playerChoise;
-            if (m_CurrentPlayer.TypeOfPlayer == eTypeOfPlayer.Human)
+            if (i_SquareToMove!=null)
             {
 				playerChoise = generateSquareToMoveHuman(m_CurrentPlayer, m_SizeOfBoard, i_AvailableVaildMoves, i_MustToDoMoves,i_SquareToMove);
             }
@@ -278,14 +282,6 @@
         {
             SquareMove moveFromClient = null;
             bool isValidMove = false;
-            //while (!isValidMove)
-            //{
-                //moveFromClient = UIUtilities.getValidSquareToMoveFromClient(i_CurrentPlayer, i_SizeOfBoard);
-                //if (moveFromClient == null)
-               // {
-                //    break;
-               // }
-
                 if (i_MustToDoMoves.Count > 0)
                 {
 					isValidMove = i_MustToDoMoves.Contains(i_SquareToMove);
@@ -294,7 +290,6 @@
                 {
 					isValidMove = i_AvaiableVaildMoves.Contains(i_SquareToMove);
                 }
-           // }
             if(isValidMove)
 			{
 				moveFromClient = i_SquareToMove;
@@ -446,6 +441,18 @@
             Player tempPlayer = m_CurrentPlayer;
             m_CurrentPlayer = m_OtherPlayer;
             m_OtherPlayer = tempPlayer;
+            if(m_CurrentPlayer.TypeOfPlayer==eTypeOfPlayer.Computer && m_GameStatus==eGameStatus.ContinueGame)
+            {
+                OnComputerTurn();
+            }
+        }
+
+        private void OnComputerTurn()
+        {
+            if(this.ComputerTurnEventHandler!=null)
+            {
+                this.ComputerTurnEventHandler.Invoke();
+            }
         }
 
         private void checkAndSetKingSolider(Soldier currentSoldier)
@@ -483,7 +490,6 @@
                     {
                         m_SoliderThatNeedToEatNextTurn = currentSolider;
                     }
-
                     break;
                 }
             }

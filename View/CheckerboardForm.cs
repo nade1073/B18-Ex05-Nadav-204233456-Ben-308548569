@@ -8,10 +8,11 @@ namespace View
 {
 	public class CheckerBoardForm : Form
 	{
-        //** Need to implement Handle ResultOfGame
 		private const int k_SizeOfSquareInBoard = 50;
         private const string k_SoliderPicName = "S";
         private const string k_SquarePicName = "Q";
+        private const string k_LabelNameOfFirstPlayer = "FirstPlayerLabel";
+        private const string k_LabelNameOfSecondPlayer = "SecondPlayerLabel";
         private SquareMove m_CurrentMove = new SquareMove();
         private bool m_IsChooseSolider = false;
         private bool m_IsSoliderIsMovingRightNow = false;
@@ -91,11 +92,13 @@ namespace View
 
 		private void generateLabelsOfPlayersName()
 		{
-			PictureBoxWithText firstLabelPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("Player 1: {0}", CheckerboardController.Instance.CurrentPlayer.PlayerName));
-			PictureBoxWithText secondLaberlPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("Player 2: {0}", CheckerboardController.Instance.OtherPlayer.PlayerName));
+			PictureBoxWithText firstLabelPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("{0} - {1}", CheckerboardController.Instance.CurrentPlayer.PlayerName,CheckerboardController.Instance.CurrentPlayer.Score));
+			PictureBoxWithText secondLaberlPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("{0} - {1}", CheckerboardController.Instance.OtherPlayer.PlayerName, CheckerboardController.Instance.OtherPlayer.Score));
 			firstLabelPlayer.Location = new Point(70, 0);
+            firstLabelPlayer.Name = k_LabelNameOfFirstPlayer;
 			secondLaberlPlayer.Location = new Point(ClientSize.Width - 250, 0);
-			this.Controls.Add(firstLabelPlayer);
+            secondLaberlPlayer.Name = k_LabelNameOfSecondPlayer;
+            this.Controls.Add(firstLabelPlayer);
 			this.Controls.Add(secondLaberlPlayer);
 		}
 
@@ -118,13 +121,13 @@ namespace View
 				pointToDraw.Y += k_SizeOfSquareInBoard;
 				if ((i < (sizeOfBoard / 2) - 1))
 				{
-					SoliderToDraw = Properties.Resources.BrownSolider;
-					isDrawSolider = true;
+					SoliderToDraw = Properties.Resources.BlackSolider;
+                    isDrawSolider = true;
 				}
 				else if (i >= (sizeOfBoard / 2) + 1)
 				{
 					SoliderToDraw = Properties.Resources.WhiteSolider;
-					isDrawSolider = true;
+                    isDrawSolider = true;
 					numberOfPlayer = eNumberOfPlayer.Second;
 				}
 				for (int j = 0; j < sizeOfBoard; j++)
@@ -155,7 +158,13 @@ namespace View
             string stringToSetToTagName = String.Format("{0}{1}", (char)(MovementOptions.k_StartCol + i_Col), (char)(MovementOptions.k_StartRow + i_Row));
             solider.Name = string.Format("{0}{1}", stringToSetToTagName, k_SoliderPicName);
 			solider.Tag = new TagSolider(stringToSetToTagName,i_NumberOfPlayer);
-			solider.MouseClick += Solider_MouseClick;
+
+            TagSolider tempTag = solider.Tag as TagSolider;
+            if ((i_NumberOfPlayer==eNumberOfPlayer.Second && CheckerboardController.Instance.OtherPlayer.TypeOfPlayer != eTypeOfPlayer.Computer) || i_NumberOfPlayer==eNumberOfPlayer.First)
+            {
+                solider.MouseClick += Solider_MouseClick;
+            }
+           
             solider.StopSoliderMoveEventHandler += solider_StopMove;
             this.Controls.Add(solider);
 			solider.BringToFront();
@@ -290,6 +299,7 @@ namespace View
         private void initialzieEventForBoard()
         {
             CheckerboardController.Instance.GameStausChange += checkerboard_GameStausChange;
+            CheckerboardController.Instance.ComputerTurnEventHandler += computer_TurnPlay;
         }
 
         private void initializeEventForPlayer(Player i_Player)
@@ -302,6 +312,12 @@ namespace View
             }
         }
 
+        private void removeBorderFromSoliderThatHaveBeenChosen()
+        {
+            Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", m_CurrentMove.FromSquare.ToString(), k_SoliderPicName), false);
+            soliderToMove[0].Invalidate();
+        }
+
         //Listeners
         private void closeButton_Click(object sender, EventArgs e)
 		{
@@ -310,7 +326,7 @@ namespace View
 
 		private void Solider_MouseClick(object sender, MouseEventArgs e)
 		{
-            if(!m_IsSoliderIsMovingRightNow)
+            if (!m_IsSoliderIsMovingRightNow)
             {
                 OvalPictureBox currentSolider = sender as OvalPictureBox;
                 if (currentSolider != null)
@@ -338,12 +354,6 @@ namespace View
 			
 		}
 
-        private void removeBorderFromSoliderThatHaveBeenChosen()
-        {
-            Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", m_CurrentMove.FromSquare.ToString(), k_SoliderPicName), false);
-            soliderToMove[0].Invalidate();
-        }
-
         private void SquareBoard_MouseClick(object sender, MouseEventArgs e)
 		{
 			if (this.m_IsChooseSolider == true)
@@ -362,9 +372,13 @@ namespace View
 
 		private void solider_ChangeType(Soldier i_Soldier)
 		{
-            //Need  To Implement to King change on view!!!
             Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", i_Soldier.PlaceOnBoard.ToString(), k_SoliderPicName), false);
-           // soliderToMove[0].BackgroundImage = **SET IMAGE HERE**;
+            if (i_Soldier.CharRepresent == Soldier.k_FirstPlayerKing)
+                soliderToMove[0].BackgroundImage = Properties.Resources.BlackKing;
+            else
+            {
+                soliderToMove[0].BackgroundImage = Properties.Resources.WhiteKing;
+            }
         }
 
         private void solider_ChangePlaceOnBoard(Square i_OldSquare,Square i_NewSquare)
@@ -379,6 +393,7 @@ namespace View
             {
                 Point newLocation = new Point(currentLocationOfSquare.X + 2, currentLocationOfSquare.Y + 2);
                 m_IsSoliderIsMovingRightNow = true;
+                currentSolider.BringToFront();
                 currentSolider.startAnimationOfMovingSolider(newLocation);
             }
             TagSolider tagOfCurrentSolider = soliderToMove[0].Tag as TagSolider;
@@ -428,8 +443,34 @@ namespace View
                 CheckerboardController.Instance.initializeCheckerGame();
                 CheckerBoardForm viewBoard = new CheckerBoardForm();
                 viewBoard.ShowDialog();
-
             }  
+        }
+
+        private void computer_TurnPlay()
+        {
+
+            Timer tempTimer = new Timer();
+            tempTimer.Interval = 1500;
+            tempTimer.Tick += (sender, e) => {
+                CheckerboardController.Instance.nextTurn(null);
+                tempTimer.Stop();
+            };
+            tempTimer.Start();
+        }
+
+        private void score_ChangeText(Player i_Player)
+        {
+            Control[] currentLabel;
+            if(i_Player.NumberOfPlayer==eNumberOfPlayer.First)
+            {
+                currentLabel = this.Controls.Find(k_LabelNameOfFirstPlayer, false);
+            }
+            else
+            {
+                currentLabel = this.Controls.Find(k_LabelNameOfSecondPlayer, false);
+            }
+            PictureBoxWithText currentPictureBox = currentLabel[0] as PictureBoxWithText;
+            currentPictureBox.setNewTextInsidePicture(String.Format("{0} - {1}", i_Player.PlayerName, i_Player.Score));
         }
 
         //classes

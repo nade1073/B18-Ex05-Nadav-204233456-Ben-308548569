@@ -9,11 +9,6 @@ namespace View
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, System.EventArgs e)
-        {
-
-        }
-
         private void checkBox1_CheckedChanged(object sender, System.EventArgs e)
         {
             CheckBox CheckBoxOfPlayerTwo = sender as CheckBox;
@@ -42,8 +37,8 @@ namespace View
                 secondName = PlayerTwoTextBox.Text;
                 isSecondPlayerHasValidName = Player.isPlayerNameValid(secondName);
             }
-          //  if(isFirstPlayerHasValidName && isSecondPlayerHasValidName)
-           // {
+            if(isFirstPlayerHasValidName && isSecondPlayerHasValidName)
+            {
                 eSizeBoard sizeOfBoard;
                 if(this.SixSize.Checked)
                 {
@@ -59,17 +54,16 @@ namespace View
                 }
 
                 this.Hide();
-			    CheckerboardController.Instance.initializeCheckerBoard("Nadav", "Shalev", sizeOfBoard);
-                
+			    CheckerboardController.Instance.initializeCheckerBoard(firstName, secondName, sizeOfBoard);
 			    CheckerBoardForm viewBoard = new CheckerBoardForm();
                 viewBoard.ShowDialog();
                 this.Close();         
-            //}
-            //else
-            //{
-            //    ErrorWindow errorForm = new ErrorWindow();
-            //    errorForm.ShowDialog();
-            //}
+            }
+            else
+            {
+                ErrorWindow errorForm = new ErrorWindow();
+                errorForm.ShowDialog();
+            }
         }
     }
 }
