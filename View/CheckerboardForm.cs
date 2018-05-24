@@ -208,10 +208,78 @@ namespace View
 			}
 		}
 
-		private void generateLocationLablesOfCheckerboard()
-		{
-			//NeedToImplement
-		}
+        private void generateLocationLablesOfCheckerboard()
+        {
+
+            int sizeOfBoard = (int)CheckerboardController.Instance.SizeBoard;
+
+            Label labelsTop = new Label();
+            Label labelsDown = new Label();
+            Label labelsLeftSide = new Label();
+            Label labelsRightSide = new Label();
+
+            Point pointForLabelsUp = new Point(158, 90);
+            Point pointForLabelsDown = new Point(158, 90);
+            Point pointForLabelsLeftSide = new Point(120, 130);
+            Point pointForLabelsRightSide = new Point(115, 130);
+
+            char textToAddUp = 'A';
+            char textToAddInTheSides = 'a';
+
+            for (int i = 0; i < sizeOfBoard; i++)
+            {
+                pointForLabelsDown.Y += k_SizeOfSquareInBoard;
+                pointForLabelsRightSide.X += k_SizeOfSquareInBoard;
+            }
+            pointForLabelsDown.Y += 40;
+            pointForLabelsRightSide.X += 40;
+
+            for (int i = 0; i < sizeOfBoard; i++)
+            {
+                labelsTop = new Label();
+                labelsDown = new Label();
+                labelsLeftSide = new Label();
+                labelsRightSide = new Label();
+
+                labelsTop.Text = textToAddUp.ToString();
+                labelsTop.BackColor = Color.Transparent;
+                labelsTop.Font = new Font("Segoe Script", 14, FontStyle.Bold);
+                labelsTop.AutoSize = true;
+                labelsTop.Location = pointForLabelsUp;
+
+                labelsDown.Text = textToAddUp.ToString();
+                labelsDown.BackColor = Color.Transparent;
+                labelsDown.Font = new Font("Segoe Script", 14, FontStyle.Bold);
+                labelsDown.AutoSize = true;
+                labelsDown.Location = pointForLabelsDown;
+
+                labelsLeftSide.Text = textToAddInTheSides.ToString();
+                labelsLeftSide.BackColor = Color.Transparent;
+                labelsLeftSide.Font = new Font("Segoe Script", 14, FontStyle.Bold);
+                labelsLeftSide.AutoSize = true;
+                labelsLeftSide.Location = pointForLabelsLeftSide;
+
+                labelsRightSide.Text = textToAddInTheSides.ToString();
+                labelsRightSide.BackColor = Color.Transparent;
+                labelsRightSide.Font = new Font("Segoe Script", 14, FontStyle.Bold);
+                labelsRightSide.AutoSize = true;
+                labelsRightSide.Location = pointForLabelsRightSide;
+
+                this.Controls.Add(labelsTop);
+                this.Controls.Add(labelsDown);
+                this.Controls.Add(labelsLeftSide);
+                this.Controls.Add(labelsRightSide);
+
+                textToAddUp = (char)(textToAddUp + 1);
+                textToAddInTheSides = (char)(textToAddInTheSides + 1);
+
+                pointForLabelsUp.X += k_SizeOfSquareInBoard;
+                pointForLabelsDown.X += k_SizeOfSquareInBoard;
+                pointForLabelsLeftSide.Y += k_SizeOfSquareInBoard;
+                pointForLabelsRightSide.Y += k_SizeOfSquareInBoard;
+            }
+
+        }
 
         private void initializeEventHandlers()
         {
