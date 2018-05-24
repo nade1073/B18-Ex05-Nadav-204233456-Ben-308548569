@@ -385,7 +385,14 @@ namespace View
         private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
 		{
             Control[] soliderToRemove = this.Controls.Find(String.Format("{0}{1}", i_SoldierToRemove.PlaceOnBoard.ToString(), k_SoliderPicName), false);
-            this.Controls.Remove(soliderToRemove[0]);
+            OvalPictureBox currentSolider = soliderToRemove[0] as OvalPictureBox;
+            Timer tempTimer = new Timer();
+            tempTimer.Interval = 1100;
+            tempTimer.Tick += (sender, e) => {
+                this.Controls.Remove(soliderToRemove[0]);
+                tempTimer.Stop();
+            };
+            tempTimer.Start();
         }
 
         private void solider_StopMove(bool i_IsStopToMove)
