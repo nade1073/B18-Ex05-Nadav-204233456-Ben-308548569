@@ -155,11 +155,11 @@ namespace View
             solider.Name = string.Format("{0}{1}", stringToSetToTagName, k_SoliderPicName);
 			solider.Tag = new TagSolider(stringToSetToTagName,i_NumberOfPlayer);
 			solider.MouseClick += Solider_MouseClick;
-			this.Controls.Add(solider);
+            this.Controls.Add(solider);
 			solider.BringToFront();
 		}
 
-		private void swapIndexToDrawTheSolider(ref int i_Index,int i)
+        private void swapIndexToDrawTheSolider(ref int i_Index,int i)
 		{
             if(i%2==0)
             {
@@ -290,21 +290,28 @@ namespace View
             Control[] soliderToMove=this.Controls.Find(String.Format("{0}{1}", i_OldSquare.ToString(), k_SoliderPicName),false);
             Control[] squareToMoveTheSolider = this.Controls.Find(String.Format("{0}{1}", i_NewSquare.ToString(), k_SquarePicName), false);
             Point currentLocationOfSquare = squareToMoveTheSolider[0].Location;
+            
+            OvalPictureBox currentSolider = soliderToMove[0] as OvalPictureBox;
+            if(currentSolider!=null)
+            {
+                Point newLocation = new Point(currentLocationOfSquare.X + 2, currentLocationOfSquare.Y + 2);
+                currentSolider.startAnimationOfMovingSolider(newLocation);
+            }
             //$Add AnimationMove + sound
-            soliderToMove[0].Location = new Point(currentLocationOfSquare.X + 2, currentLocationOfSquare.Y + 2);
+            //soliderToMove[0].Location = new Point(currentLocationOfSquare.X + 2, currentLocationOfSquare.Y + 2);
             TagSolider tagOfCurrentSolider = soliderToMove[0].Tag as TagSolider;
             tagOfCurrentSolider.Name = i_NewSquare.ToString();
             soliderToMove[0].Name = String.Format("{0}{1}", i_NewSquare.ToString(), k_SoliderPicName);
-        }
 
-		private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
+        }
+        private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
 		{
             Control[] soliderToRemove = this.Controls.Find(String.Format("{0}{1}", i_SoldierToRemove.PlaceOnBoard.ToString(), k_SoliderPicName), false);
             this.Controls.Remove(soliderToRemove[0]);
         }
 
 		//classes
-		private class TagName
+		public class TagName
 		{
 			private String m_String;
 
@@ -326,7 +333,7 @@ namespace View
 			}
 		}
 
-		private class TagSolider : TagName
+		public class TagSolider : TagName
 		{
 			private eNumberOfPlayer m_NumberOfPlayer;
 
