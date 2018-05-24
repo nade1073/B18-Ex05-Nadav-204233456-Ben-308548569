@@ -38,7 +38,8 @@ namespace View
 			//
 			generateLocationLablesOfCheckerboard();
 
-			//SomeOtherProporties         
+            //SomeOtherProporties  
+            this.Click += CheckerBoardForm_Click;       
 			this.AutoScaleMode = AutoScaleMode.Font;
 			this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 			this.BackgroundImage = Properties.Resources.wooden_background_3217987_1920;
@@ -50,7 +51,15 @@ namespace View
 			this.ResumeLayout(false);
 		}
 
-		private void generateClientSize()
+        private void CheckerBoardForm_Click(object sender, EventArgs e)
+        {
+            if(m_IsChooseSolider)
+            {
+                removeBorderFromSoliderThatHaveBeenChosen();
+            }
+        }
+
+        private void generateClientSize()
 		{
 			int centerSizeOfBoard = k_SizeOfSquareInBoard * (int)CheckerboardController.Instance.SizeBoard;
 			int width = 150 * 2 + centerSizeOfBoard;
@@ -69,8 +78,14 @@ namespace View
 			closeButton.Size = new System.Drawing.Size(39, 32);
 			closeButton.SizeMode = PictureBoxSizeMode.StretchImage;
 			closeButton.Click += this.closeButton_Click;
-			this.Controls.Add(closeButton);
-		}
+            ToolTip toolTip1 = new ToolTip();
+            toolTip1.AutoPopDelay = 5000;
+            toolTip1.InitialDelay = 100;
+            toolTip1.ReshowDelay = 100;
+            toolTip1.ShowAlways = true;
+            toolTip1.SetToolTip(closeButton, "Exit");
+            this.Controls.Add(closeButton);
+        }
 
 		private void generateLabelsOfPlayersName()
 		{
@@ -222,10 +237,16 @@ namespace View
 			OvalPictureBox currentSolider = sender as OvalPictureBox;
 			if (currentSolider != null)
 			{
+                if(m_IsChooseSolider==true)
+                {
+                    removeBorderFromSoliderThatHaveBeenChosen();
+                    Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", m_CurrentMove.FromSquare.ToString(), k_SoliderPicName), false);
+                    soliderToMove[0].Invalidate();
+                }
 				TagSolider currentTagSolider = currentSolider.Tag as TagSolider;
 				if(currentTagSolider.NumberOfPlayer==CheckerboardController.Instance.CurrentPlayer.NumberOfPlayer)
 				{
-                    //Brush(Border) the current solideer with whiteColor--https://stackoverflow.com/questions/4446478/how-do-i-create-a-colored-border-on-a-picturebox-control
+                    currentSolider.MakeBorder(currentSolider.CreateGraphics());
                     this.m_CurrentMove.FromSquare = new Square(currentTagSolider.Name[1], currentTagSolider.Name[0]);
                     this.m_IsChooseSolider = true;	
 				}
@@ -233,11 +254,18 @@ namespace View
 			}
 		}
 
-		private void SquareBoard_MouseClick(object sender, MouseEventArgs e)
+        private void removeBorderFromSoliderThatHaveBeenChosen()
+        {
+            Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", m_CurrentMove.FromSquare.ToString(), k_SoliderPicName), false);
+            soliderToMove[0].Invalidate();
+        }
+
+        private void SquareBoard_MouseClick(object sender, MouseEventArgs e)
 		{
 			if (this.m_IsChooseSolider == true)
 			{
-				PictureBox currentSquare = sender as PictureBox;
+                removeBorderFromSoliderThatHaveBeenChosen();
+                PictureBox currentSquare = sender as PictureBox;
 				if (currentSquare != null)
 				{
 					TagName currentPositionOfCurrentSolider = currentSquare.Tag as TagName;
@@ -250,8 +278,10 @@ namespace View
 
 		private void solider_ChangeType(Soldier i_Soldier)
 		{
-			//Need  To Implement to King change on view!!!
-		}
+            //Need  To Implement to King change on view!!!
+            Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", i_Soldier.PlaceOnBoard.ToString(), k_SoliderPicName), false);
+           // soliderToMove[0].BackgroundImage = **SET IMAGE HERE**;
+        }
 
         private void solider_ChangePlaceOnBoard(Square i_OldSquare,Square i_NewSquare)
 		{
@@ -264,7 +294,6 @@ namespace View
             TagSolider tagOfCurrentSolider = soliderToMove[0].Tag as TagSolider;
             tagOfCurrentSolider.Name = i_NewSquare.ToString();
             soliderToMove[0].Name = String.Format("{0}{1}", i_NewSquare.ToString(), k_SoliderPicName);
-
         }
 
 		private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
