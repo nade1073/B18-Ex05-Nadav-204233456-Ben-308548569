@@ -92,8 +92,8 @@ namespace View
 		{
 			PictureBoxWithText firstLabelPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("Player 1: {0}", CheckerboardController.Instance.CurrentPlayer.PlayerName));
 			PictureBoxWithText secondLaberlPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("Player 2: {0}", CheckerboardController.Instance.OtherPlayer.PlayerName));
-			firstLabelPlayer.Location = new Point(70, 20);
-			secondLaberlPlayer.Location = new Point(ClientSize.Width - 250, 20);
+			firstLabelPlayer.Location = new Point(70, 0);
+			secondLaberlPlayer.Location = new Point(ClientSize.Width - 250, 0);
 			this.Controls.Add(firstLabelPlayer);
 			this.Controls.Add(secondLaberlPlayer);
 		}
