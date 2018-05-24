@@ -10,6 +10,8 @@ namespace View
 	{
         //** Need to implement Handle ResultOfGame
 		private const int k_SizeOfSquareInBoard = 50;
+        private const string k_SoliderPicName = "S";
+        private const string k_SquarePicName = "Q";
         private SquareMove m_CurrentMove = new SquareMove();
         private bool m_IsChooseSolider = false;
 
@@ -134,6 +136,7 @@ namespace View
 			OvalPictureBox solider = new OvalPictureBox(i_SoliderToDraw);
 			solider.Location = new Point(i_PointToDraw.X + 2, i_PointToDraw.Y + 2);
             string stringToSetToTagName = String.Format("{0}{1}", (char)(MovementOptions.k_StartCol + i_Col), (char)(MovementOptions.k_StartRow + i_Row));
+            solider.Name = string.Format("{0}{1}", stringToSetToTagName, k_SoliderPicName);
 			solider.Tag = new TagSolider(stringToSetToTagName,i_NumberOfPlayer);
 			solider.MouseClick += Solider_MouseClick;
 			this.Controls.Add(solider);
@@ -159,12 +162,12 @@ namespace View
 			squareBoard.BackgroundImage = i_ImageToLoad;
 			squareBoard.BackgroundImageLayout = ImageLayout.Stretch;
 			squareBoard.Location = i_PointToDraw;
-			squareBoard.Name = string.Format("{0}{1}", i_PointToDraw.X, i_PointToDraw.Y);
 			squareBoard.Size = new Size(k_SizeOfSquareInBoard, k_SizeOfSquareInBoard);
 			squareBoard.TabStop = false;
 			squareBoard.MouseClick += SquareBoard_MouseClick;
 			string stringToSetToTagName = String.Format("{0}{1}", (char)(MovementOptions.k_StartCol + i_Col),(char)(MovementOptions.k_StartRow + i_Row));
-			squareBoard.Tag = new TagName(stringToSetToTagName);
+            squareBoard.Name = string.Format("{0}{1}", stringToSetToTagName, k_SquarePicName);
+            squareBoard.Tag = new TagName(stringToSetToTagName);
 			this.Controls.Add(squareBoard);
 			squareBoard.SendToBack();
 		}
@@ -198,7 +201,6 @@ namespace View
             initializeEventForPlayer(CheckerboardController.Instance.CurrentPlayer);
             initializeEventForPlayer(CheckerboardController.Instance.OtherPlayer);
         }
-
 
 
         private void initializeEventForPlayer(Player i_Player)
@@ -255,8 +257,17 @@ namespace View
 
         private void solider_ChangePlaceOnBoard(Square i_OldSquare,Square i_NewSquare)
 		{
-			//NEED TO IMPLEMENT!! change the place of solider
-		}
+
+            Control[] soliderToMove=this.Controls.Find(String.Format("{0}{1}", i_OldSquare.ToString(), k_SoliderPicName),false);
+            Control[] squareToMoveTheSolider = this.Controls.Find(String.Format("{0}{1}", i_NewSquare.ToString(), k_SquarePicName), false);
+            Point currentLocationOfSquare = squareToMoveTheSolider[0].Location;
+            //$Add AnimationMove
+            soliderToMove[0].Location = new Point(currentLocationOfSquare.X + 2, currentLocationOfSquare.Y + 2);
+            TagSolider tagOfCurrentSolider = soliderToMove[0].Tag as TagSolider;
+            tagOfCurrentSolider.Name = i_NewSquare.ToString();
+            soliderToMove[0].Name = String.Format("{0}{1}", i_NewSquare.ToString(), k_SoliderPicName);
+
+        }
 
 		private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
 		{
