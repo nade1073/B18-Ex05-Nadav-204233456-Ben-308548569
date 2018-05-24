@@ -8,18 +8,17 @@
         private eSizeBoard m_SizeOfBoard;
         private Player m_CurrentPlayer;
         private Player m_OtherPlayer;
-        private eGameEndChoice m_GameEndChoice = eGameEndChoice.Continue;
         private eGameStatus m_GameStatus = eGameStatus.ContinueGame;
         private MovementOptions m_MovmentOption;
         private IAChecker m_LogicIaCheckerGame;
+        public event Action<eGameStatus> GameStausChange;
 
         private Soldier m_SoliderThatNeedToEatNextTurn;
 
         public CheckerBoard()
         {
         }
-
-
+        
         public CheckerBoard(CheckerBoard i_CloneToThisBoard)
         {
             Player otherFirstPlayer = i_CloneToThisBoard.m_CurrentPlayer;
@@ -27,7 +26,6 @@
             m_CurrentPlayer = new Player(i_CloneToThisBoard.CurrentPlayer.PlayerName, otherFirstPlayer.TypeOfPlayer, otherFirstPlayer.NumberOfPlayer, i_CloneToThisBoard.m_SizeOfBoard);
             m_OtherPlayer = new Player(otherSecondPlayer.PlayerName, otherSecondPlayer.TypeOfPlayer, otherSecondPlayer.NumberOfPlayer, i_CloneToThisBoard.m_SizeOfBoard);
             m_SizeOfBoard = i_CloneToThisBoard.m_SizeOfBoard;
-            m_GameEndChoice = i_CloneToThisBoard.m_GameEndChoice;
             m_GameStatus = i_CloneToThisBoard.m_GameStatus;
             m_MovmentOption = i_CloneToThisBoard.m_MovmentOption;
             if (i_CloneToThisBoard.m_SoliderThatNeedToEatNextTurn != null)
@@ -55,6 +53,19 @@
             }
         }
 
+        public eGameStatus GameStatus
+        {
+            get
+            {
+                return m_GameStatus;
+            }
+            set
+            {
+                m_GameStatus = value;
+                OnGameStatusChange(value);
+            }
+        }
+
         public eSizeBoard SizeBoard
         {
             get
@@ -68,29 +79,6 @@
             get
             {
                 return m_SoliderThatNeedToEatNextTurn;
-            }
-        }
-
-        public void startGame()
-        {
-            
-            while (m_GameEndChoice == eGameEndChoice.Continue)
-            {
-                while (m_GameStatus == eGameStatus.ContinueGame)
-                {
-                    System.Console.Clear();
-                    UIUtilities.PrintBoard(m_CurrentPlayer, m_OtherPlayer, (int)m_SizeOfBoard);
-                    //nextTurn();
-                    setParamatersForNextTurn();
-                }
-
-                caclculateResultGame();
-                UIUtilities.printResultOnScreen(m_CurrentPlayer, m_OtherPlayer, (int)m_SizeOfBoard);
-                m_GameEndChoice = UIUtilities.getChoiseToContinuteTheGameFromClient();
-                if (m_GameEndChoice == eGameEndChoice.Continue)
-                {
-                    initializeCheckerGame();
-                }
             }
         }
 
@@ -149,7 +137,6 @@
                 if (currentSoldier.PlaceOnBoard.Equals(i_PlayerChoise.FromSquare))
                 {
                     currentSoldier.PlaceOnBoard = i_PlayerChoise.ToSquare;
-                    //UIUtilities.setCurrentMove(m_CurrentPlayer.PlayerName, currentSoldier.CharRepresent, i_PlayerChoise);
                     checkAndSetKingSolider(currentSoldier);
                     m_SoliderThatNeedToEatNextTurn = null;
                     break;
@@ -198,7 +185,7 @@
         {
             Player firstPlayer = getPlayer(eNumberOfPlayer.First);
             Player secondPlayer = getPlayer(eNumberOfPlayer.Second);
-            switch (m_GameStatus)
+            switch (GameStatus)
             {
                 case eGameStatus.FirstPlayerWon:
                     {
@@ -232,19 +219,18 @@
             {               
                 initializeForMustMoves(availableVaildMoves, ref mustToDoMoves);
 				SquareMove playerChoise = generateSquareToMove(availableVaildMoves, mustToDoMoves,i_SquareToMove);
-                // if (playerChoise == null)
-                // {
-                //     m_GameStatus = eGameStatus.QExit;
-                //  }
-                //  else
-                // {
                 if (playerChoise != null)
                 {
                     perfomSoliderAction(playerChoise);
                     setParamatersForNextTurn();
                 }
-               //}
             }
+
+            //Move This TO UI!
+            //if (m_GameEndChoice == eGameEndChoice.Continue)
+            //{
+            //    initializeCheckerGame();
+            //}
         }
 
 		private SquareMove generateSquareToMove(List<SquareMove> i_AvailableVaildMoves, List<SquareMove> i_MustToDoMoves,SquareMove i_SquareToMove=null)
@@ -528,19 +514,21 @@
         {
             if (i_WineerPlayer == null)
             {
-                m_GameStatus = eGameStatus.Tie;
+                GameStatus = eGameStatus.Tie;
             }
             else
             {
                 if (i_WineerPlayer.NumberOfPlayer == eNumberOfPlayer.First)
                 {
-                    m_GameStatus = eGameStatus.FirstPlayerWon;
+                    GameStatus = eGameStatus.FirstPlayerWon;
                 }
                 else
                 {
-                    m_GameStatus = eGameStatus.SecondPlayerWon;
+                    GameStatus = eGameStatus.SecondPlayerWon;
                 }
             }
+            caclculateResultGame();
+            
         }
 
         private void calculateAndSetPoints(Player i_Winner, Player i_Loser)
@@ -564,7 +552,7 @@
             return playerToReturn;
         }
 
-        private void initializeCheckerGame()
+        public void initializeCheckerGame()
         {
             Player firstPlayer = getPlayer(eNumberOfPlayer.First);
             Player secondPlayer = getPlayer(eNumberOfPlayer.Second);
@@ -574,7 +562,14 @@
             m_OtherPlayer = secondPlayer;
             m_GameStatus = eGameStatus.ContinueGame;
             m_SoliderThatNeedToEatNextTurn = null;
-            UIUtilities.initializeParameters();
+        }
+
+        private void OnGameStatusChange(eGameStatus i_CurrentGameStatus)
+        {
+            if(this.GameStausChange!=null)
+            {
+                GameStausChange.Invoke(i_CurrentGameStatus);
+            }
         }
     }
 }

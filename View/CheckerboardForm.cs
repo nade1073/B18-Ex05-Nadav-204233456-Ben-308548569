@@ -213,18 +213,17 @@ namespace View
 
             int sizeOfBoard = (int)CheckerboardController.Instance.SizeBoard;
 
-            Label labelsTop = new Label();
-            Label labelsDown = new Label();
-            Label labelsLeftSide = new Label();
-            Label labelsRightSide = new Label();
-
+            Label labelsTop;
+            Label labelsDown;
+            Label labelsLeftSide;
+            Label labelsRightSide;
             Point pointForLabelsUp = new Point(158, 90);
             Point pointForLabelsDown = new Point(158, 90);
             Point pointForLabelsLeftSide = new Point(120, 130);
             Point pointForLabelsRightSide = new Point(115, 130);
 
-            char textToAddUp = 'A';
-            char textToAddInTheSides = 'a';
+            char textToAddUp = MovementOptions.k_StartCol;
+            char textToAddInTheSides = MovementOptions.k_StartRow;
 
             for (int i = 0; i < sizeOfBoard; i++)
             {
@@ -285,6 +284,12 @@ namespace View
         {
             initializeEventForPlayer(CheckerboardController.Instance.CurrentPlayer);
             initializeEventForPlayer(CheckerboardController.Instance.OtherPlayer);
+            initialzieEventForBoard();
+        }
+
+        private void initialzieEventForBoard()
+        {
+            CheckerboardController.Instance.GameStausChange += checkerboard_GameStausChange;
         }
 
         private void initializeEventForPlayer(Player i_Player)
@@ -400,8 +405,22 @@ namespace View
             m_IsSoliderIsMovingRightNow = i_IsStopToMove;
         }
 
-		//classes
-		public class TagName
+        private void checkerboard_GameStausChange(eGameStatus i_CurrentGameStatus)
+        {
+            //Need to Implement --http://md.hit.ac.il/pluginfile.php/332983/mod_resource/content/0/DN_HIT_2018B_Ex05.pdf 
+            //pop a messagebox 
+
+            //SomeOne won -- ask another round? and initialize all the things + on the logic
+            //if(no)
+            //exit
+            //if(anotherRound)
+            //CheckerboardController.Instance.initializeCheckerGame()
+            //Change Location of all players!! with move animation
+            throw new NotImplementedException();
+        }
+
+        //classes
+        public class TagName
 		{
 			private String m_String;
 
