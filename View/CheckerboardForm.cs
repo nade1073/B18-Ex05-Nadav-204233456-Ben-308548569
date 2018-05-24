@@ -56,6 +56,7 @@ namespace View
             if(m_IsChooseSolider)
             {
                 removeBorderFromSoliderThatHaveBeenChosen();
+                m_IsChooseSolider = false;
             }
         }
 
