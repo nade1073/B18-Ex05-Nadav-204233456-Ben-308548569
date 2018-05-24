@@ -12,7 +12,6 @@
         private MovementOptions m_MovmentOption;
         private IAChecker m_LogicIaCheckerGame;
         public event Action<eGameStatus> GameStausChange;
-        public event Action ComputerTurnEventHandler;
 
         private Soldier m_SoliderThatNeedToEatNextTurn;
 
@@ -33,7 +32,6 @@
             {
                 m_SoliderThatNeedToEatNextTurn = new Soldier(i_CloneToThisBoard.m_SoliderThatNeedToEatNextTurn.CharRepresent, i_CloneToThisBoard.m_SoliderThatNeedToEatNextTurn.PlaceOnBoard, i_CloneToThisBoard.m_SoliderThatNeedToEatNextTurn.TypeOfSoldier);
             }
-
             m_CurrentPlayer.Soldiers = addSoldiers(m_CurrentPlayer.Soldiers);
             m_OtherPlayer.Soldiers = addSoldiers(m_OtherPlayer.Soldiers);
         }
@@ -222,17 +220,8 @@
 				SquareMove playerChoise = generateSquareToMove(availableVaildMoves, mustToDoMoves,i_SquareToMove);
                 if (playerChoise != null)
                 {
-                    eTypeOfPlayer currentTypeOfPlayer = m_CurrentPlayer.TypeOfPlayer;
                     perfomSoliderAction(playerChoise);
                     setParamatersForNextTurn();
-                    if(m_GameStatus==eGameStatus.ContinueGame)
-                    {
-                        if (currentTypeOfPlayer == eTypeOfPlayer.Computer && currentTypeOfPlayer == m_CurrentPlayer.TypeOfPlayer)
-                        {
-                            OnComputerTurn();
-                        }
-                    }
-
                 }
             }
         }
@@ -441,19 +430,8 @@
             Player tempPlayer = m_CurrentPlayer;
             m_CurrentPlayer = m_OtherPlayer;
             m_OtherPlayer = tempPlayer;
-            if(m_CurrentPlayer.TypeOfPlayer==eTypeOfPlayer.Computer && m_GameStatus==eGameStatus.ContinueGame)
-            {
-                OnComputerTurn();
-            }
         }
 
-        private void OnComputerTurn()
-        {
-            if(this.ComputerTurnEventHandler!=null)
-            {
-                this.ComputerTurnEventHandler.Invoke();
-            }
-        }
 
         private void checkAndSetKingSolider(Soldier currentSoldier)
         {
@@ -534,7 +512,6 @@
                 }
             }
             caclculateResultGame();
-            
         }
 
         private void calculateAndSetPoints(Player i_Winner, Player i_Loser)

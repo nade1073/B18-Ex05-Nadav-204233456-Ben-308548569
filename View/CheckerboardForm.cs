@@ -32,7 +32,7 @@ namespace View
 			generateCloseButton();
 
 			//Checkerboard + Soliders
-			generateBoardSquaresAndSoliders();
+			generateBoardSquaresAndSoliders(true);
            
 			// Labels
 			generateLabelsOfPlayersName();
@@ -102,7 +102,7 @@ namespace View
 			this.Controls.Add(secondLaberlPlayer);
 		}
 
-		private void generateBoardSquaresAndSoliders()
+		private void generateBoardSquaresAndSoliders(bool i_IsNeedToDrawSquare)
 		{
 			int sizeOfBoard = (int)CheckerboardController.Instance.SizeBoard;
 			int indexToDrawTheSolider = 1;
@@ -137,7 +137,10 @@ namespace View
                         pointToDraw.X += k_SizeOfSquareInBoard;
                         swapImages(ref imageToLoad);
 					}
-					applySquareBoardToView(imageToLoad, pointToDraw, i, j);
+                    if (i_IsNeedToDrawSquare)
+                    {
+                        applySquareBoardToView(imageToLoad, pointToDraw, i, j);
+                    }
 					if (isDrawSolider)
 					{
 						if (j == indexToDrawTheSolider)
@@ -299,11 +302,11 @@ namespace View
         private void initialzieEventForBoard()
         {
             CheckerboardController.Instance.GameStausChange += checkerboard_GameStausChange;
-            CheckerboardController.Instance.ComputerTurnEventHandler += computer_TurnPlay;
         }
 
         private void initializeEventForPlayer(Player i_Player)
         {
+            i_Player.ScoreChangeEventHandler += score_ChangeText;
             foreach (Soldier currentSoldier in i_Player.Soldiers)
             {
                 currentSoldier.ChangePlaceOnBoardEventHandler += this.solider_ChangePlaceOnBoard;
@@ -316,6 +319,18 @@ namespace View
         {
             Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", m_CurrentMove.FromSquare.ToString(), k_SoliderPicName), false);
             soliderToMove[0].Invalidate();
+        }
+
+        private void removeAllSolidersFromBord()
+        {
+            foreach (Control c in this.Controls)
+            {
+                OvalPictureBox currentSolider = c as OvalPictureBox;
+                if(currentSolider!=null)
+                {
+                    this.Controls.Remove(c);
+                }
+            }
         }
 
         //Listeners
@@ -335,7 +350,7 @@ namespace View
                     {
                         removeBorderFromSoliderThatHaveBeenChosen();
                         Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", m_CurrentMove.FromSquare.ToString(), k_SoliderPicName), false);
-                        soliderToMove[0].Invalidate();
+                        soliderToMove[0].Refresh();
                     }
                     TagSolider currentTagSolider = currentSolider.Tag as TagSolider;
                     if (currentTagSolider.NumberOfPlayer == CheckerboardController.Instance.CurrentPlayer.NumberOfPlayer)
@@ -348,10 +363,8 @@ namespace View
                     {
                         this.m_IsChooseSolider = false;
                     }
-
                 }
             }
-			
 		}
 
         private void SquareBoard_MouseClick(object sender, MouseEventArgs e)
@@ -367,7 +380,7 @@ namespace View
 					CheckerboardController.Instance.nextTurn(m_CurrentMove);
 				}
 				this.m_IsChooseSolider = false;
-			}
+			} 
 		}
 
 		private void solider_ChangeType(Soldier i_Soldier)
@@ -399,7 +412,6 @@ namespace View
             TagSolider tagOfCurrentSolider = soliderToMove[0].Tag as TagSolider;
             tagOfCurrentSolider.Name = i_NewSquare.ToString();
             soliderToMove[0].Name = String.Format("{0}{1}", i_NewSquare.ToString(), k_SoliderPicName);
-
         }
 
         private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
@@ -418,6 +430,10 @@ namespace View
         private void solider_StopMove(bool i_IsStopToMove)
         {
             m_IsSoliderIsMovingRightNow = i_IsStopToMove;
+            if (CheckerboardController.Instance.CurrentPlayer.TypeOfPlayer == eTypeOfPlayer.Computer && CheckerboardController.Instance.GameStatus==eGameStatus.ContinueGame)
+            {
+                CheckerboardController.Instance.nextTurn(null);
+            }
         }
 
         private void checkerboard_GameStausChange(eGameStatus i_CurrentGameStatus)
@@ -437,25 +453,12 @@ namespace View
                     break;
             }      
             var messageBoxResult = MessageBox.Show(message, caption,MessageBoxButtons.YesNo,MessageBoxIcon.Question);
-            this.Close();
             if (messageBoxResult == DialogResult.Yes)
             {
                 CheckerboardController.Instance.initializeCheckerGame();
-                CheckerBoardForm viewBoard = new CheckerBoardForm();
-                viewBoard.ShowDialog();
+                removeAllSolidersFromBord();
+                generateBoardSquaresAndSoliders(false);
             }  
-        }
-
-        private void computer_TurnPlay()
-        {
-
-            Timer tempTimer = new Timer();
-            tempTimer.Interval = 1500;
-            tempTimer.Tick += (sender, e) => {
-                CheckerboardController.Instance.nextTurn(null);
-                tempTimer.Stop();
-            };
-            tempTimer.Start();
         }
 
         private void score_ChangeText(Player i_Player)

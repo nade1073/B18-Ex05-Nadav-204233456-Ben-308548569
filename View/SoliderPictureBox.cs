@@ -69,6 +69,7 @@ namespace View
             {
                 StopSoliderMoveEventHandler.Invoke(false);
             }
+
         }
 
         public void MakeBorder(Graphics e)
