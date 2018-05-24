@@ -141,7 +141,6 @@ namespace View
 			solider.MouseClick += Solider_MouseClick;
 			this.Controls.Add(solider);
 			solider.BringToFront();
-
 		}
 
 		private void swapIndexToDrawTheSolider(ref int i_Index,int i)
@@ -202,7 +201,6 @@ namespace View
             initializeEventForPlayer(CheckerboardController.Instance.OtherPlayer);
         }
 
-
         private void initializeEventForPlayer(Player i_Player)
         {
             foreach (Soldier currentSoldier in i_Player.Soldiers)
@@ -261,7 +259,7 @@ namespace View
             Control[] soliderToMove=this.Controls.Find(String.Format("{0}{1}", i_OldSquare.ToString(), k_SoliderPicName),false);
             Control[] squareToMoveTheSolider = this.Controls.Find(String.Format("{0}{1}", i_NewSquare.ToString(), k_SquarePicName), false);
             Point currentLocationOfSquare = squareToMoveTheSolider[0].Location;
-            //$Add AnimationMove
+            //$Add AnimationMove + sound
             soliderToMove[0].Location = new Point(currentLocationOfSquare.X + 2, currentLocationOfSquare.Y + 2);
             TagSolider tagOfCurrentSolider = soliderToMove[0].Tag as TagSolider;
             tagOfCurrentSolider.Name = i_NewSquare.ToString();
@@ -271,8 +269,9 @@ namespace View
 
 		private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
 		{
-			//Need to Implement to remove the player from board
-		}
+            Control[] soliderToRemove = this.Controls.Find(String.Format("{0}{1}", i_SoldierToRemove.PlaceOnBoard.ToString(), k_SoliderPicName), false);
+            this.Controls.Remove(soliderToRemove[0]);
+        }
 
 		//classes
 		private class TagName
