@@ -407,16 +407,29 @@ namespace View
 
         private void checkerboard_GameStausChange(eGameStatus i_CurrentGameStatus)
         {
-            //Need to Implement --http://md.hit.ac.il/pluginfile.php/332983/mod_resource/content/0/DN_HIT_2018B_Ex05.pdf 
-            //pop a messagebox 
+            string message="";
+            const string caption = "Form Closing";
+            switch (i_CurrentGameStatus)
+            {
+                case eGameStatus.FirstPlayerWon:
+                    message = "player 1 Won!\nAnother Round?";
+                    break;
+                case eGameStatus.SecondPlayerWon:
+                     message = "player 2 Won!\nAnother Round?";
+                    break;
+                case eGameStatus.Tie:
+                     message = "Tie!\nAnother Round?";
+                    break;
+            }      
+            var messageBoxResult = MessageBox.Show(message, caption,MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            this.Close();
+            if (messageBoxResult == DialogResult.Yes)
+            {
+                CheckerboardController.Instance.initializeCheckerGame();
+                CheckerBoardForm viewBoard = new CheckerBoardForm();
+                viewBoard.ShowDialog();
 
-            //SomeOne won -- ask another round? and initialize all the things + on the logic
-            //if(no)
-            //exit
-            //if(anotherRound)
-            //CheckerboardController.Instance.initializeCheckerGame()
-            //Change Location of all players!! with move animation
-            throw new NotImplementedException();
+            }  
         }
 
         //classes

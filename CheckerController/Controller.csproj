@@ -55,7 +55,6 @@
     <Compile Include="IAChecker.cs" />
     <Compile Include="MovementOptions.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Soldier.cs" />
     <Compile Include="Square.cs" />
