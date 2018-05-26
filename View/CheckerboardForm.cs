@@ -2,13 +2,12 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Controller;
-using System.Collections.Generic;
 
 namespace View
 {
-	public class CheckerBoardForm : Form
-	{
-		private const int k_SizeOfSquareInBoard = 50;
+    public class CheckerBoardForm : Form
+    {
+        private const int k_SizeOfSquareInBoard = 50;
         private const string k_SoliderPicName = "S";
         private const string k_SquarePicName = "Q";
         private const string k_LabelNameOfFirstPlayer = "FirstPlayerLabel";
@@ -17,45 +16,46 @@ namespace View
         private bool m_IsChooseSolider = false;
         private bool m_IsSoliderIsMovingRightNow = false;
 
-		public CheckerBoardForm()
-		{
-			initializeComponent();
-			initializeEventHandlers();
-		}
+        public CheckerBoardForm()
+        {
+            CheckerboardController.Instance.initializeCheckerGame();
+            initializeComponent();
+            initializeEventHandlers();
+        }
 
-		private void initializeComponent()
-		{
-			//Client Size
-			generateClientSize();
+        private void initializeComponent()
+        {
+            //Client Size
+            generateClientSize();
 
-			//CloseButton
-			generateCloseButton();
+            //CloseButton
+            generateCloseButton();
 
-			//Checkerboard + Soliders
-			generateBoardSquaresAndSoliders(true);
-           
-			// Labels
-			generateLabelsOfPlayersName();
+            //Checkerboard + Soliders
+            generateBoardSquaresAndSoliders();
 
-			//
-			generateLocationLablesOfCheckerboard();
+            // Labels
+            generateLabelsOfPlayersName();
+
+            //
+            generateLocationLablesOfCheckerboard();
 
             //SomeOtherProporties  
-            this.Click += CheckerBoardForm_Click;       
-			this.AutoScaleMode = AutoScaleMode.Font;
-			this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			this.BackgroundImage = Properties.Resources.wooden_background_3217987_1920;
-			this.BackgroundImageLayout = ImageLayout.Stretch;
-			this.Cursor = Cursors.Arrow;
-			this.FormBorderStyle = FormBorderStyle.None;
-			this.Name = "WindowCheckerBoard";
-			this.StartPosition = FormStartPosition.CenterScreen;
-			this.ResumeLayout(false);
-		}
+            this.Click += CheckerBoardForm_Click;
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            this.BackgroundImage = Properties.Resources.wooden_background_3217987_1920;
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            this.Cursor = Cursors.Arrow;
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.Name = "WindowCheckerBoard";
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.ResumeLayout(false);
+        }
 
         private void CheckerBoardForm_Click(object sender, EventArgs e)
         {
-            if(m_IsChooseSolider)
+            if (m_IsChooseSolider)
             {
                 removeBorderFromSoliderThatHaveBeenChosen();
                 m_IsChooseSolider = false;
@@ -63,24 +63,24 @@ namespace View
         }
 
         private void generateClientSize()
-		{
-			int centerSizeOfBoard = k_SizeOfSquareInBoard * (int)CheckerboardController.Instance.SizeBoard;
-			int width = 150 * 2 + centerSizeOfBoard;
-			int height = 100 * 2 + centerSizeOfBoard;
-			this.ClientSize = new Size(width, height);
-		}
+        {
+            int centerSizeOfBoard = k_SizeOfSquareInBoard * (int)CheckerboardController.Instance.SizeBoard;
+            int width = 150 * 2 + centerSizeOfBoard;
+            int height = 100 * 2 + centerSizeOfBoard;
+            this.ClientSize = new Size(width, height);
+        }
 
-		private void generateCloseButton()
-		{
-			PictureBox closeButton = new PictureBox();
-			closeButton.BackColor = Color.Transparent;
-			closeButton.BackgroundImage = Properties.Resources.CloseWoodenButton;
-			closeButton.BackgroundImageLayout = ImageLayout.Zoom;
-			closeButton.Cursor = Cursors.Hand;
-			closeButton.Location = new Point(ClientSize.Width - 40, 0);
-			closeButton.Size = new System.Drawing.Size(39, 32);
-			closeButton.SizeMode = PictureBoxSizeMode.StretchImage;
-			closeButton.Click += this.closeButton_Click;
+        private void generateCloseButton()
+        {
+            PictureBox closeButton = new PictureBox();
+            closeButton.BackColor = Color.Transparent;
+            closeButton.BackgroundImage = Properties.Resources.CloseWoodenButton;
+            closeButton.BackgroundImageLayout = ImageLayout.Zoom;
+            closeButton.Cursor = Cursors.Hand;
+            closeButton.Location = new Point(ClientSize.Width - 40, 0);
+            closeButton.Size = new System.Drawing.Size(39, 32);
+            closeButton.SizeMode = PictureBoxSizeMode.StretchImage;
+            closeButton.Click += this.closeButton_Click;
             ToolTip toolTip1 = new ToolTip();
             toolTip1.AutoPopDelay = 5000;
             toolTip1.InitialDelay = 100;
@@ -90,92 +90,89 @@ namespace View
             this.Controls.Add(closeButton);
         }
 
-		private void generateLabelsOfPlayersName()
-		{
-			PictureBoxWithText firstLabelPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("{0} - {1}", CheckerboardController.Instance.CurrentPlayer.PlayerName,CheckerboardController.Instance.CurrentPlayer.Score));
-			PictureBoxWithText secondLaberlPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("{0} - {1}", CheckerboardController.Instance.OtherPlayer.PlayerName, CheckerboardController.Instance.OtherPlayer.Score));
-			firstLabelPlayer.Location = new Point(70, 0);
+        private void generateLabelsOfPlayersName()
+        {
+            PictureBoxWithText firstLabelPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("{0} - {1}", CheckerboardController.Instance.CurrentPlayer.PlayerName, CheckerboardController.Instance.CurrentPlayer.Score));
+            PictureBoxWithText secondLaberlPlayer = new PictureBoxWithText(Properties.Resources.WoodenForLabel, String.Format("{0} - {1}", CheckerboardController.Instance.OtherPlayer.PlayerName, CheckerboardController.Instance.OtherPlayer.Score));
+            firstLabelPlayer.Location = new Point(70, 0);
             firstLabelPlayer.Name = k_LabelNameOfFirstPlayer;
-			secondLaberlPlayer.Location = new Point(ClientSize.Width - 250, 0);
+            secondLaberlPlayer.Location = new Point(ClientSize.Width - 250, 0);
             secondLaberlPlayer.Name = k_LabelNameOfSecondPlayer;
             this.Controls.Add(firstLabelPlayer);
-			this.Controls.Add(secondLaberlPlayer);
-		}
+            this.Controls.Add(secondLaberlPlayer);
+        }
 
-		private void generateBoardSquaresAndSoliders(bool i_IsNeedToDrawSquare)
-		{
-			int sizeOfBoard = (int)CheckerboardController.Instance.SizeBoard;
-			int indexToDrawTheSolider = 1;
+        private void generateBoardSquaresAndSoliders()
+        {
+            int sizeOfBoard = (int)CheckerboardController.Instance.SizeBoard;
+            int indexToDrawTheSolider = 1;
             int startingPointX = 150;
             int startingPointY = 70;
             eNumberOfPlayer numberOfPlayer = eNumberOfPlayer.First;
-			Point pointToDraw = new Point(startingPointX, startingPointY);
-			Bitmap imageToLoad = Properties.Resources.WhiteSquare;
-			imageToLoad.Tag = new TagName("White");
-			Image SoliderToDraw = null;
-			bool isDrawSolider = false;
-			for (int i = 0; i < sizeOfBoard; i++)
-			{
-                swapIndexToDrawTheSolider(ref indexToDrawTheSolider,i);
+            Point pointToDraw = new Point(startingPointX, startingPointY);
+            Bitmap imageToLoad = Properties.Resources.WhiteSquare;
+            imageToLoad.Tag = new TagName("White");
+            Image SoliderToDraw = null;
+            bool isDrawSolider = false;
+            for (int i = 0; i < sizeOfBoard; i++)
+            {
+                swapIndexToDrawTheSolider(ref indexToDrawTheSolider, i);
                 pointToDraw.X = startingPointX;
-				pointToDraw.Y += k_SizeOfSquareInBoard;
-				if ((i < (sizeOfBoard / 2) - 1))
-				{
-					SoliderToDraw = Properties.Resources.BlackSolider;
+                pointToDraw.Y += k_SizeOfSquareInBoard;
+                if ((i < (sizeOfBoard / 2) - 1))
+                {
+                    SoliderToDraw = Properties.Resources.BlackSolider;
                     isDrawSolider = true;
-				}
-				else if (i >= (sizeOfBoard / 2) + 1)
-				{
-					SoliderToDraw = Properties.Resources.WhiteSolider;
+                }
+                else if (i >= (sizeOfBoard / 2) + 1)
+                {
+                    SoliderToDraw = Properties.Resources.WhiteSolider;
                     isDrawSolider = true;
-					numberOfPlayer = eNumberOfPlayer.Second;
-				}
-				for (int j = 0; j < sizeOfBoard; j++)
-				{
-					if (j != 0)
-					{
+                    numberOfPlayer = eNumberOfPlayer.Second;
+                }
+                for (int j = 0; j < sizeOfBoard; j++)
+                {
+                    if (j != 0)
+                    {
                         pointToDraw.X += k_SizeOfSquareInBoard;
                         swapImages(ref imageToLoad);
-					}
-                    if (i_IsNeedToDrawSquare)
-                    {
-                        applySquareBoardToView(imageToLoad, pointToDraw, i, j);
                     }
-					if (isDrawSolider)
-					{
-						if (j == indexToDrawTheSolider)
-						{
-							applySoliderToFrontOfView(SoliderToDraw, pointToDraw, i, j,numberOfPlayer);
-							indexToDrawTheSolider += 2;
-						}
-					}
+                    applySquareBoardToView(imageToLoad, pointToDraw, i, j);
+                    if (isDrawSolider)
+                    {
+                        if (j == indexToDrawTheSolider)
+                        {
+                            applySoliderToFrontOfView(SoliderToDraw, pointToDraw, i, j, numberOfPlayer);
+                            indexToDrawTheSolider += 2;
+                        }
+                    }
                 }
                 isDrawSolider = false;
-			}
+            }
         }
 
-		private void applySoliderToFrontOfView(Image i_SoliderToDraw, Point i_PointToDraw, int i_Row, int i_Col,eNumberOfPlayer i_NumberOfPlayer)
-		{
-			OvalPictureBox solider = new OvalPictureBox(i_SoliderToDraw);
-			solider.Location = new Point(i_PointToDraw.X + 2, i_PointToDraw.Y + 2);
+        private void applySoliderToFrontOfView(Image i_SoliderToDraw, Point i_PointToDraw, int i_Row, int i_Col, eNumberOfPlayer i_NumberOfPlayer)
+        {
+            OvalPictureBox solider = new OvalPictureBox(i_SoliderToDraw);
+            solider.Location = new Point(i_PointToDraw.X + 2, i_PointToDraw.Y + 2);
             string stringToSetToTagName = String.Format("{0}{1}", (char)(MovementOptions.k_StartCol + i_Col), (char)(MovementOptions.k_StartRow + i_Row));
             solider.Name = string.Format("{0}{1}", stringToSetToTagName, k_SoliderPicName);
-			solider.Tag = new TagSolider(stringToSetToTagName,i_NumberOfPlayer);
+            solider.Tag = new TagSolider(stringToSetToTagName, i_NumberOfPlayer);
 
             TagSolider tempTag = solider.Tag as TagSolider;
-            if ((i_NumberOfPlayer==eNumberOfPlayer.Second && CheckerboardController.Instance.OtherPlayer.TypeOfPlayer != eTypeOfPlayer.Computer) || i_NumberOfPlayer==eNumberOfPlayer.First)
+            if ((i_NumberOfPlayer == eNumberOfPlayer.Second && CheckerboardController.Instance.OtherPlayer.TypeOfPlayer != eTypeOfPlayer.Computer) || i_NumberOfPlayer == eNumberOfPlayer.First)
             {
                 solider.MouseClick += Solider_MouseClick;
             }
-           
+
             solider.StopSoliderMoveEventHandler += solider_StopMove;
             this.Controls.Add(solider);
-			solider.BringToFront();
-		}
+            solider.BringToFront();
+        }
 
-        private void swapIndexToDrawTheSolider(ref int i_Index,int i)
-		{
-            if(i%2==0)
+        private void swapIndexToDrawTheSolider(ref int i_Index, int i)
+        {
+            if (i % 2 == 0)
             {
                 i_Index = 1;
             }
@@ -183,42 +180,42 @@ namespace View
             {
                 i_Index = 0;
             }
-		}
+        }
 
-		private void applySquareBoardToView(Bitmap i_ImageToLoad, Point i_PointToDraw, int i_Row, int i_Col)
-		{
-			PictureBox squareBoard = new PictureBox();
-			squareBoard.BackgroundImage = i_ImageToLoad;
-			squareBoard.BackgroundImageLayout = ImageLayout.Stretch;
-			squareBoard.Location = i_PointToDraw;
-			squareBoard.Size = new Size(k_SizeOfSquareInBoard, k_SizeOfSquareInBoard);
-			squareBoard.TabStop = false;
-			squareBoard.MouseClick += SquareBoard_MouseClick;
-			string stringToSetToTagName = String.Format("{0}{1}", (char)(MovementOptions.k_StartCol + i_Col),(char)(MovementOptions.k_StartRow + i_Row));
+        private void applySquareBoardToView(Bitmap i_ImageToLoad, Point i_PointToDraw, int i_Row, int i_Col)
+        {
+            PictureBox squareBoard = new PictureBox();
+            squareBoard.BackgroundImage = i_ImageToLoad;
+            squareBoard.BackgroundImageLayout = ImageLayout.Stretch;
+            squareBoard.Location = i_PointToDraw;
+            squareBoard.Size = new Size(k_SizeOfSquareInBoard, k_SizeOfSquareInBoard);
+            squareBoard.TabStop = false;
+            squareBoard.MouseClick += SquareBoard_MouseClick;
+            string stringToSetToTagName = String.Format("{0}{1}", (char)(MovementOptions.k_StartCol + i_Col), (char)(MovementOptions.k_StartRow + i_Row));
             squareBoard.Name = string.Format("{0}{1}", stringToSetToTagName, k_SquarePicName);
             squareBoard.Tag = new TagName(stringToSetToTagName);
-			this.Controls.Add(squareBoard);
-			squareBoard.SendToBack();
-		}
+            this.Controls.Add(squareBoard);
+            squareBoard.SendToBack();
+        }
 
-		private void swapImages(ref Bitmap i_CurrentImage)
-		{
+        private void swapImages(ref Bitmap i_CurrentImage)
+        {
 
-			TagName tempTag = i_CurrentImage.Tag as TagName;
-			if (tempTag != null)
-			{
-				if (tempTag.Name == "Brown")
-				{
-					i_CurrentImage = Properties.Resources.WhiteSquare;
-					i_CurrentImage.Tag = new TagName("White");
-				}
-				else
-				{
-					i_CurrentImage = Properties.Resources.BrownSquare;
-					i_CurrentImage.Tag = new TagName("Brown");
-				}
-			}
-		}
+            TagName tempTag = i_CurrentImage.Tag as TagName;
+            if (tempTag != null)
+            {
+                if (tempTag.Name == "Brown")
+                {
+                    i_CurrentImage = Properties.Resources.WhiteSquare;
+                    i_CurrentImage.Tag = new TagName("White");
+                }
+                else
+                {
+                    i_CurrentImage = Properties.Resources.BrownSquare;
+                    i_CurrentImage.Tag = new TagName("Brown");
+                }
+            }
+        }
 
         private void generateLocationLablesOfCheckerboard()
         {
@@ -306,7 +303,6 @@ namespace View
 
         private void initializeEventForPlayer(Player i_Player)
         {
-            i_Player.ScoreChangeEventHandler += score_ChangeText;
             foreach (Soldier currentSoldier in i_Player.Soldiers)
             {
                 currentSoldier.ChangePlaceOnBoardEventHandler += this.solider_ChangePlaceOnBoard;
@@ -321,26 +317,14 @@ namespace View
             soliderToMove[0].Invalidate();
         }
 
-        private void removeAllSolidersFromBord()
-        {
-            foreach (Control c in this.Controls)
-            {
-                OvalPictureBox currentSolider = c as OvalPictureBox;
-                if(currentSolider!=null)
-                {
-                    this.Controls.Remove(c);
-                }
-            }
-        }
-
         //Listeners
         private void closeButton_Click(object sender, EventArgs e)
-		{
-			this.Dispose();
-		}
+        {
+            this.Dispose();
+        }
 
-		private void Solider_MouseClick(object sender, MouseEventArgs e)
-		{
+        private void Solider_MouseClick(object sender, MouseEventArgs e)
+        {
             if (!m_IsSoliderIsMovingRightNow)
             {
                 OvalPictureBox currentSolider = sender as OvalPictureBox;
@@ -365,26 +349,26 @@ namespace View
                     }
                 }
             }
-		}
+        }
 
         private void SquareBoard_MouseClick(object sender, MouseEventArgs e)
-		{
-			if (this.m_IsChooseSolider == true)
-			{
+        {
+            if (this.m_IsChooseSolider == true)
+            {
                 removeBorderFromSoliderThatHaveBeenChosen();
                 PictureBox currentSquare = sender as PictureBox;
-				if (currentSquare != null)
-				{
-					TagName currentPositionOfCurrentSolider = currentSquare.Tag as TagName;
+                if (currentSquare != null)
+                {
+                    TagName currentPositionOfCurrentSolider = currentSquare.Tag as TagName;
                     this.m_CurrentMove.ToSquare = new Square(currentPositionOfCurrentSolider.Name[1], currentPositionOfCurrentSolider.Name[0]);
-					CheckerboardController.Instance.nextTurn(m_CurrentMove);
-				}
-				this.m_IsChooseSolider = false;
-			} 
-		}
+                    CheckerboardController.Instance.nextTurn(m_CurrentMove);
+                }
+                this.m_IsChooseSolider = false;
+            }
+        }
 
-		private void solider_ChangeType(Soldier i_Soldier)
-		{
+        private void solider_ChangeType(Soldier i_Soldier)
+        {
             Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", i_Soldier.PlaceOnBoard.ToString(), k_SoliderPicName), false);
             if (i_Soldier.CharRepresent == Soldier.k_FirstPlayerKing)
                 soliderToMove[0].BackgroundImage = Properties.Resources.BlackKing;
@@ -394,15 +378,15 @@ namespace View
             }
         }
 
-        private void solider_ChangePlaceOnBoard(Square i_OldSquare,Square i_NewSquare)
-		{
+        private void solider_ChangePlaceOnBoard(Square i_OldSquare, Square i_NewSquare)
+        {
 
-            Control[] soliderToMove=this.Controls.Find(String.Format("{0}{1}", i_OldSquare.ToString(), k_SoliderPicName),false);
+            Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", i_OldSquare.ToString(), k_SoliderPicName), false);
             Control[] squareToMoveTheSolider = this.Controls.Find(String.Format("{0}{1}", i_NewSquare.ToString(), k_SquarePicName), false);
             Point currentLocationOfSquare = squareToMoveTheSolider[0].Location;
-            
+
             OvalPictureBox currentSolider = soliderToMove[0] as OvalPictureBox;
-            if(currentSolider!=null)
+            if (currentSolider != null)
             {
                 Point newLocation = new Point(currentLocationOfSquare.X + 2, currentLocationOfSquare.Y + 2);
                 m_IsSoliderIsMovingRightNow = true;
@@ -415,12 +399,13 @@ namespace View
         }
 
         private void solider_RemoveFromBoard(Soldier i_SoldierToRemove)
-		{
+        {
             Control[] soliderToRemove = this.Controls.Find(String.Format("{0}{1}", i_SoldierToRemove.PlaceOnBoard.ToString(), k_SoliderPicName), false);
             OvalPictureBox currentSolider = soliderToRemove[0] as OvalPictureBox;
             Timer tempTimer = new Timer();
             tempTimer.Interval = 1100;
-            tempTimer.Tick += (sender, e) => {
+            tempTimer.Tick += (sender, e) =>
+            {
                 this.Controls.Remove(soliderToRemove[0]);
                 tempTimer.Stop();
             };
@@ -430,15 +415,15 @@ namespace View
         private void solider_StopMove(bool i_IsStopToMove)
         {
             m_IsSoliderIsMovingRightNow = i_IsStopToMove;
-            if (CheckerboardController.Instance.CurrentPlayer.TypeOfPlayer == eTypeOfPlayer.Computer && CheckerboardController.Instance.GameStatus==eGameStatus.ContinueGame)
+            if (CheckerboardController.Instance.CurrentPlayer.TypeOfPlayer == eTypeOfPlayer.Computer && CheckerboardController.Instance.GameStatus == eGameStatus.ContinueGame)
             {
-                CheckerboardController.Instance.nextTurn(null);
+                 CheckerboardController.Instance.nextTurn(null);
             }
         }
 
         private void checkerboard_GameStausChange(eGameStatus i_CurrentGameStatus)
         {
-            string message="";
+            string message = "";
             const string caption = "Form Closing";
             switch (i_CurrentGameStatus)
             {
@@ -446,76 +431,61 @@ namespace View
                     message = "player 1 Won!\nAnother Round?";
                     break;
                 case eGameStatus.SecondPlayerWon:
-                     message = "player 2 Won!\nAnother Round?";
+                    message = "player 2 Won!\nAnother Round?";
                     break;
                 case eGameStatus.Tie:
-                     message = "Tie!\nAnother Round?";
+                    message = "Tie!\nAnother Round?";
                     break;
-            }      
-            var messageBoxResult = MessageBox.Show(message, caption,MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            }
+            var messageBoxResult = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            this.Dispose();
             if (messageBoxResult == DialogResult.Yes)
             {
-                CheckerboardController.Instance.initializeCheckerGame();
-                removeAllSolidersFromBord();
-                generateBoardSquaresAndSoliders(false);
-            }  
-        }
-
-        private void score_ChangeText(Player i_Player)
-        {
-            Control[] currentLabel;
-            if(i_Player.NumberOfPlayer==eNumberOfPlayer.First)
-            {
-                currentLabel = this.Controls.Find(k_LabelNameOfFirstPlayer, false);
+                CheckerBoardForm newCheckerBoard = new CheckerBoardForm();
+                newCheckerBoard.ShowDialog();
             }
-            else
-            {
-                currentLabel = this.Controls.Find(k_LabelNameOfSecondPlayer, false);
-            }
-            PictureBoxWithText currentPictureBox = currentLabel[0] as PictureBoxWithText;
-            currentPictureBox.setNewTextInsidePicture(String.Format("{0} - {1}", i_Player.PlayerName, i_Player.Score));
         }
 
         //classes
         public class TagName
-		{
-			private String m_String;
+        {
+            private String m_String;
 
-			public TagName(String i_setName)
-			{
-				Name = i_setName;
-			}
+            public TagName(String i_setName)
+            {
+                Name = i_setName;
+            }
 
-			public String Name
-			{
-				get
-				{
-					return m_String;
-				}
-				set
-				{
-					m_String = value;
-				}
-			}
-		}
+            public String Name
+            {
+                get
+                {
+                    return m_String;
+                }
+                set
+                {
+                    m_String = value;
+                }
+            }
+        }
 
-		public class TagSolider : TagName
-		{
-			private eNumberOfPlayer m_NumberOfPlayer;
+        public class TagSolider : TagName
+        {
+            private eNumberOfPlayer m_NumberOfPlayer;
 
-			public TagSolider(String i_setName,eNumberOfPlayer i_NumberOfPlayer) : base(i_setName)
-			{
-				m_NumberOfPlayer = i_NumberOfPlayer;
-			}
+            public TagSolider(String i_setName, eNumberOfPlayer i_NumberOfPlayer) : base(i_setName)
+            {
+                m_NumberOfPlayer = i_NumberOfPlayer;
+            }
 
-			public eNumberOfPlayer NumberOfPlayer
-			{
-				get
-				{
-					return m_NumberOfPlayer;
-				}
-			}
-		}
+            public eNumberOfPlayer NumberOfPlayer
+            {
+                get
+                {
+                    return m_NumberOfPlayer;
+                }
+            }
+        }
 
     }
 }

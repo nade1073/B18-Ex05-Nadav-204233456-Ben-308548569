@@ -54,8 +54,8 @@ namespace View
                 }
 
                 this.Hide();
-			    CheckerboardController.Instance.initializeCheckerBoard(firstName, secondName, sizeOfBoard);
-			    CheckerBoardForm viewBoard = new CheckerBoardForm();
+                CheckerboardController.Instance.initializeCheckerBoard(firstName, secondName, sizeOfBoard);
+                CheckerBoardForm viewBoard = new CheckerBoardForm();
                 viewBoard.ShowDialog();
                 this.Close();         
             }

@@ -180,29 +180,24 @@
             m_MovmentOption = new MovementOptions(m_SizeOfBoard);
         }
 
-        private void caclculateResultGame()
+        private void caclculateResultGame(eNumberOfPlayer i_NumberOfPlayerThatWon)
         {
             Player firstPlayer = getPlayer(eNumberOfPlayer.First);
             Player secondPlayer = getPlayer(eNumberOfPlayer.Second);
-            switch (GameStatus)
+            switch (i_NumberOfPlayerThatWon)
             {
-                case eGameStatus.FirstPlayerWon:
+                case eNumberOfPlayer.First:
                     {
                         calculateAndSetPoints(firstPlayer, secondPlayer);
                         break;
                     }
 
-                case eGameStatus.SecondPlayerWon:
+                case eNumberOfPlayer.Second:
                     {
                         calculateAndSetPoints(secondPlayer, firstPlayer);
                         break;
                     }
 
-                case eGameStatus.QExit:
-                    {
-                        m_CurrentPlayer.Score += 4;
-                        break;
-                    }
             }
         }
 
@@ -496,6 +491,7 @@
 
         private void setGameStatus(Player i_WineerPlayer = null)
         {
+            caclculateResultGame(i_WineerPlayer.NumberOfPlayer);
             if (i_WineerPlayer == null)
             {
                 GameStatus = eGameStatus.Tie;
@@ -511,7 +507,7 @@
                     GameStatus = eGameStatus.SecondPlayerWon;
                 }
             }
-            caclculateResultGame();
+            
         }
 
         private void calculateAndSetPoints(Player i_Winner, Player i_Loser)

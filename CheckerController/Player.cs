@@ -11,7 +11,6 @@
         private List<Soldier> m_Soldiers;
         private eTypeOfPlayer m_TypeOfPlayer;
         private eNumberOfPlayer m_NumberOfPlayer;
-        public event Action<Player> ScoreChangeEventHandler;
 
         public Player(String i_PlayerName, eTypeOfPlayer i_TypeOfPlayer, eNumberOfPlayer i_NumberOfPlayer, eSizeBoard i_BoardSize)
         {
@@ -59,7 +58,6 @@
             set
             {
                 m_Score = value;
-                OnScoreChange();
             }
         }
 
@@ -225,14 +223,5 @@
                 i_startRow++;
             }
         }
-
-        private void OnScoreChange()
-        {
-            if(this.ScoreChangeEventHandler!=null)
-            {
-                ScoreChangeEventHandler.Invoke(this);
-            }
-        }
-
     }
 }
