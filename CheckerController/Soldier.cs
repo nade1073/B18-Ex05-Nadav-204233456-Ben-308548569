@@ -66,7 +66,7 @@
 
             set
             {
-				m_PlaceOnBoard = value;
+
 				OnStartAnimationOfSoliderMovingAfterChangePlaceOnBoard(value);
             }
         }
@@ -79,8 +79,9 @@
 		protected virtual void OnStartAnimationOfSoliderMovingAfterChangePlaceOnBoard(Square i_SquareToChange)
         {
 			Square oldSquare = m_PlaceOnBoard;
-			Square newSquare = i_SquareToChange;         
-			if (StartAnimationOfSoliderMovingAfterChangePlaceOnBoard != null)
+			Square newSquare = i_SquareToChange;
+            m_PlaceOnBoard = i_SquareToChange;
+            if (StartAnimationOfSoliderMovingAfterChangePlaceOnBoard != null)
             {
 				StartAnimationOfSoliderMovingAfterChangePlaceOnBoard.Invoke(oldSquare, newSquare);     
             }

@@ -332,6 +332,7 @@
             if (messageBoxResult == DialogResult.Yes)
             {
                 CheckerboardController.Instance.InitializeCheckerGame();
+                initializeEventHandlers();
                 removeAllSolidersFromBord();
                 updateScoreInsideLabels();
                 generateBoardSquaresAndSoliders(false);
@@ -412,7 +413,7 @@
 				CheckerboardController.Instance.nextTurn(m_CurrentMove);
 				if (CheckerboardController.Instance.GameStatus != eGameStatus.ContinueGame)
 				{
-					await Task.Delay(3000);
+					await Task.Delay(2000);
 					gameStatusChangeMessage(CheckerboardController.Instance.GameStatus);
 				}
 				else
