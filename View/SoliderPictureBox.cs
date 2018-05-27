@@ -5,24 +5,26 @@ using System.Windows.Forms;
 
 namespace View
 {
-    class OvalPictureBox : PictureBox
+    public class OvalPictureBox : PictureBox
     {
         private Timer m_TimerOfMovingPic;
         private Point m_NewLocation;
-        public event Action<bool> StopSoliderMoveEventHandler;
+        public event Action<bool> PictureOfSoliderStoppedToMove;
+		private const int k_SizeOfPic = 45;
+		private const int k_TimeInterval = 10;
 
         public OvalPictureBox(Image i_ImageToSet)
         {
             this.BackgroundImage = i_ImageToSet;
             this.BackColor = Color.Transparent;
             this.BackgroundImageLayout = ImageLayout.Stretch;
-            this.Size = new Size(45, 45);
+			this.Size = new Size(k_SizeOfPic, k_SizeOfPic);
             this.m_TimerOfMovingPic = new Timer();
-            this.m_TimerOfMovingPic.Interval = 10;
+			this.m_TimerOfMovingPic.Interval = k_TimeInterval;
             this.m_TimerOfMovingPic.Tick += TimerOfMovingPic_Tick;
         }
 
-        private void TimerOfMovingPic_Tick(object sender, EventArgs e)
+        private void TimerOfMovingPic_Tick(object i_Sender, EventArgs i_Events)
         {
             if (this.Location == m_NewLocation)
             {
@@ -60,29 +62,28 @@ namespace View
         private void doWhenReachToThePlace()
         {
             m_TimerOfMovingPic.Stop();
-            OnStopSoliderMove();
+			OnPictureOfSoliderStoppedToMove();
         }
 
-        private void OnStopSoliderMove()
+		private void OnPictureOfSoliderStoppedToMove()
         {
-            if(StopSoliderMoveEventHandler!=null)
+			if(PictureOfSoliderStoppedToMove!=null)
             {
-                StopSoliderMoveEventHandler.Invoke(false);
-            }
-
+				PictureOfSoliderStoppedToMove.Invoke(false);
+            }         
         }
 
-        public void MakeBorder(Graphics e)
+        public void MakeBorder(Graphics i_Events)
         {
             float penWidth = 4F;
             Pen myPen = new Pen(Color.FromArgb(255, 255, 255), penWidth);
-            e.DrawEllipse(myPen, new RectangleF(new PointF(3, 3), new SizeF((float)(this.Width - 7), this.Height - 7)));
+			i_Events.DrawEllipse(myPen, new RectangleF(new PointF(3, 3), new SizeF((float)(this.Width - 7), this.Height - 7)));
             myPen.Dispose();
         }
 
-        protected override void OnResize(EventArgs e)
+		protected override void OnResize(EventArgs i_Events)
         {
-            base.OnResize(e);
+			base.OnResize(i_Events);
             using (var gp = new GraphicsPath())
             {
                 gp.AddEllipse(new Rectangle(3, 3, this.Width - 7, this.Height - 7));

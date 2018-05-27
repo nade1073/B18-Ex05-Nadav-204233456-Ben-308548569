@@ -9,8 +9,8 @@ namespace View
         {
             InitializeComponent();
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        
+        private void button1_Click(object i_Sender, EventArgs i_Events)
         {
             this.Dispose();
         }

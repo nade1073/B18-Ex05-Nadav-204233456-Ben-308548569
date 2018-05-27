@@ -176,7 +176,7 @@
                 if (currentSolider.PlaceOnBoard.Equals(i_SoliderToRemove))
                 {
                     Soldiers.Remove(currentSolider);
-                    currentSolider.invokeRemoveSolider();
+                    currentSolider.InvokeRemoveSoliderFromboard();
                     break;
                 }
             }

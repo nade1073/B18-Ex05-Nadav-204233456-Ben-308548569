@@ -1,18 +1,21 @@
-﻿using System.Windows.Forms;
-using Controller;
-namespace View
+﻿namespace View
 {
-    public partial class GameSettings : Form
+	using System.Windows.Forms;
+    using Controller;
+	using System;
+
+	public partial class GameSettings : Form
     {
+		private const string k_ComputerName="[Computer]";
         public GameSettings()
         {
             InitializeComponent();
         }
 
-        private void checkBox1_CheckedChanged(object sender, System.EventArgs e)
+        private void checkBox1_CheckedChanged(object i_Sender, EventArgs i_Events)
         {
-            CheckBox CheckBoxOfPlayerTwo = sender as CheckBox;
-            if(CheckBoxOfPlayerTwo.Checked==true)
+			CheckBox checkBoxOfPlayerTwo = i_Sender as CheckBox;
+			if(checkBoxOfPlayerTwo.Checked==true)
             {
                 this.PlayerTwoTextBox.Enabled = true;
                 this.PlayerTwoTextBox.Text = string.Empty;
@@ -20,12 +23,11 @@ namespace View
             else
             {
                 this.PlayerTwoTextBox.Enabled = false;
-                this.PlayerTwoTextBox.Text = "[Computer]";
-            }
-            
+				this.PlayerTwoTextBox.Text = k_ComputerName;
+            }  
         }
 
-        private void DoneButton_Click(object sender, System.EventArgs e)
+		private void DoneButton_Click(object i_Sender, EventArgs i_Events)
         {
             string firstName = PlayerOneTextBox.Text;
             string secondName = null;   

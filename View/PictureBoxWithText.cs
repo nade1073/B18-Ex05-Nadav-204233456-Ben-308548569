@@ -16,7 +16,6 @@ namespace View
             m_Image = i_ImageToSet;
             m_Text = i_Text;
             InitializeComponent();
-           
             this.Controls.Add(m_Picture);
         }
         public void setNewTextInsidePicture(string i_Text)
@@ -41,17 +40,15 @@ namespace View
             this.BackColor = Color.Transparent;
         }
 
-        private void OnDrawText(object sender,PaintEventArgs e)
+        private void OnDrawText(object i_Sender,PaintEventArgs i_Events)
         {
-            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+			i_Events.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             string text = m_Text;
-            SizeF textSize = e.Graphics.MeasureString(text, Font);
+			SizeF textSize = i_Events.Graphics.MeasureString(text, Font);
             PointF locationToDraw = new PointF();
             locationToDraw.X = (m_Picture.Width / 2) - (textSize.Width / 2) - 20;
             locationToDraw.Y = (m_Picture.Height / 2) - (textSize.Height / 2);
-            e.Graphics.DrawString(text, new Font("Segoe Script", 10, FontStyle.Bold), Brushes.Black, locationToDraw);
-        }
-
-
+			i_Events.Graphics.DrawString(text, new Font("Segoe Script", 10, FontStyle.Bold), Brushes.Black, locationToDraw);
+        }      
     }
 }

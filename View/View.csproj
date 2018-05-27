@@ -114,6 +114,8 @@
     <Compile Include="CheckerboardForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="TagName.cs" />
+    <Compile Include="TagSolider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
