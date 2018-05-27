@@ -1,6 +1,6 @@
 ﻿namespace View
 {
-    partial class GameSettings
+    public partial class GameSettings
     {
         /// <summary>
         /// Required designer variable.
@@ -17,6 +17,7 @@
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -190,4 +191,3 @@
         private System.Windows.Forms.Button DoneButton;
     }
 }
-

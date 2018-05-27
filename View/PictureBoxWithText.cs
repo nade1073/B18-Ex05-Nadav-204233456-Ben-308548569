@@ -18,6 +18,7 @@ namespace View
             InitializeComponent();
             this.Controls.Add(m_Picture);
         }
+
         public void setNewTextInsidePicture(string i_Text)
         {
             m_Text = i_Text;

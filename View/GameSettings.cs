@@ -1,12 +1,13 @@
 ﻿namespace View
 {
-	using System.Windows.Forms;
+    using System;
+    using System.Windows.Forms;
     using Controller;
-	using System;
 
-	public partial class GameSettings : Form
+    public partial class GameSettings : Form
     {
 		private const string k_ComputerName="[Computer]";
+
         public GameSettings()
         {
             InitializeComponent();
@@ -39,6 +40,7 @@
                 secondName = PlayerTwoTextBox.Text;
                 isSecondPlayerHasValidName = Player.isPlayerNameValid(secondName);
             }
+
             if(isFirstPlayerHasValidName && isSecondPlayerHasValidName)
             {
                 eSizeBoard sizeOfBoard;

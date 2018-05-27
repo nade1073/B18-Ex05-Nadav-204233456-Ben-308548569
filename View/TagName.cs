@@ -1,6 +1,7 @@
 ﻿namespace View
 {
 	using System;
+
 	public class TagName
     {
         private String m_String;
@@ -16,6 +17,7 @@
             {
                 return m_String;
             }
+
             set
             {
                 m_String = value;

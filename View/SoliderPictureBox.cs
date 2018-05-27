@@ -9,9 +9,10 @@ namespace View
     {
         private Timer m_TimerOfMovingPic;
         private Point m_NewLocation;
-        public event Action<bool> PictureOfSoliderStoppedToMove;
 		private const int k_SizeOfPic = 45;
 		private const int k_TimeInterval = 10;
+
+        public event Action<bool> PictureOfSoliderStoppedToMove;
 
         public OvalPictureBox(Image i_ImageToSet)
         {
@@ -34,15 +35,14 @@ namespace View
             {
                 if (this.Location.Y > m_NewLocation.Y)
                 {
-                    this.Top -= 1;
-                    
+                    this.Top -= 1;                  
                 }
                 else
                 {
-                    this.Top += 1;
-                  
+                    this.Top += 1;                  
                 }
-                if(this.Location.X > m_NewLocation.X)
+
+                if (this.Location.X > m_NewLocation.X)
                 {
                     this.Left -= 1;
                 }
@@ -67,7 +67,7 @@ namespace View
 
 		private void OnPictureOfSoliderStoppedToMove()
         {
-			if(PictureOfSoliderStoppedToMove!=null)
+			if (PictureOfSoliderStoppedToMove != null)
             {
 				PictureOfSoliderStoppedToMove.Invoke(false);
             }         

@@ -1,11 +1,11 @@
 ﻿namespace View
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Controller;
-    using System.Collections.Generic;
 
     public class CheckerBoardForm : Form
     {
@@ -66,14 +66,15 @@
         private void generateClientSize()
         {
             int centerSizeOfBoard = k_SizeOfSquareInBoard * (int)CheckerboardController.Instance.SizeBoard;
-            int width = 150 * 2 + centerSizeOfBoard;
-            int height = 100 * 2 + centerSizeOfBoard;
+            int width = (150 * 2) + centerSizeOfBoard;
+            int height = (100 * 2) + centerSizeOfBoard;
             this.ClientSize = new Size(width, height);
         }
 
         private void generateCloseButton()
         {
             PictureBox closeButton = new PictureBox();
+            closeButton.Name = "CloseButton";
             closeButton.BackColor = Color.Transparent;
             closeButton.BackgroundImage = Properties.Resources.CloseWoodenButton;
             closeButton.BackgroundImageLayout = ImageLayout.Zoom;
@@ -131,6 +132,7 @@
                     isDrawSolider = true;
                     numberOfPlayer = eNumberOfPlayer.Second;
                 }
+
                 for (int j = 0; j < sizeOfBoard; j++)
                 {
                     if (j != 0)
@@ -138,10 +140,12 @@
                         pointToDraw.X += k_SizeOfSquareInBoard;
                         swapImages(ref imageToLoad);
                     }
+
 					if (i_IsNeedToDrawSquare == true)
 					{
 						applySquareBoardToView(imageToLoad, pointToDraw, i, j);
 					}
+
                     if (isDrawSolider)
                     {
                         if (j == indexToDrawTheSolider)
@@ -151,6 +155,7 @@
                         }
                     }
                 }
+
                 isDrawSolider = false;
             }
         }
@@ -203,7 +208,6 @@
 
         private void swapImages(ref Bitmap i_CurrentImage)
         {
-
             TagName tempTag = i_CurrentImage.Tag as TagName;
             if (tempTag != null)
             {
@@ -240,9 +244,9 @@
                 pointForLabelsDown.Y += k_SizeOfSquareInBoard;
                 pointForLabelsRightSide.X += k_SizeOfSquareInBoard;
             }
+
             pointForLabelsDown.Y += 40;
             pointForLabelsRightSide.X += 40;
-
             for (int i = 0; i < sizeOfBoard; i++)
             {
                 labelsTop = new Label();
@@ -287,7 +291,6 @@
                 pointForLabelsLeftSide.Y += k_SizeOfSquareInBoard;
                 pointForLabelsRightSide.Y += k_SizeOfSquareInBoard;
             }
-
         }
 
         private void initializeEventHandlers()
@@ -330,6 +333,7 @@
                     message = "Tie!\nAnother Round?";
                     break;
             }
+
             var messageBoxResult = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (messageBoxResult == DialogResult.Yes)
             {
@@ -337,17 +341,14 @@
                 initializeEventHandlers();
                 removeAllSolidersFromBord();
                 updateScoreInsideLabels();
-                removeAllSolidersFromBord();
                 generateBoardSquaresAndSoliders(false);
                 m_IsChooseSolider = false;
                 m_IsSoliderIsMovingRightNow = false;
                 CheckerboardController.Instance.GameStatus = eGameStatus.ContinueGame;
-
             }
             else
             {
                 this.Close();
-                //OrDispose;
             }
         }
 
@@ -356,17 +357,20 @@
             List<int> list = new List<int>();
             for (int i=0;i<this.Controls.Count;i++)
             {
-                OvalPictureBox currentSolider = Controls[i] as OvalPictureBox;
-                if(currentSolider!=null)
+                char[] name = Controls[i].Name.ToCharArray();
+                if(name.Length==3)
                 {
-                    list.Add(i);
+                    if(name[2]=='S')
+                    {
+                        list.Add(i);
+                    }
                 }
             }
-            foreach(int i in list)
+
+            foreach (int i in list)
             {
                 this.Controls.RemoveAt(i);
             }
-
         }
 
         private void updateScoreInsideLabels()
@@ -438,7 +442,6 @@
 							gameStatusChangeMessage(CheckerboardController.Instance.GameStatus);
 							break;
 						}
-
 					}
 				} 
             }
@@ -448,7 +451,9 @@
         {
             Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", i_Soldier.PlaceOnBoard.ToString(), k_SoliderPicName), false);
             if (i_Soldier.CharRepresent == Soldier.k_FirstPlayerKing)
+            {
                 soliderToMove[0].BackgroundImage = Properties.Resources.BlackKing;
+            }
             else
             {
                 soliderToMove[0].BackgroundImage = Properties.Resources.WhiteKing;
@@ -487,7 +492,6 @@
 		private void solider_PictureOfSoliderStoppedToMove(bool i_IsStopToMove)
         {
             m_IsSoliderIsMovingRightNow = i_IsStopToMove;
-
         }      
     }
 }
