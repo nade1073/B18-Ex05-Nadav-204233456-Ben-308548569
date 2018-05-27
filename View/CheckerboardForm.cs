@@ -1,10 +1,11 @@
 ﻿namespace View
 {
-	using System;
+    using System;
     using System.Drawing;
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Controller;
+    using System.Collections.Generic;
 
     public class CheckerBoardForm : Form
     {
@@ -336,10 +337,12 @@
                 initializeEventHandlers();
                 removeAllSolidersFromBord();
                 updateScoreInsideLabels();
+                removeAllSolidersFromBord();
                 generateBoardSquaresAndSoliders(false);
                 m_IsChooseSolider = false;
                 m_IsSoliderIsMovingRightNow = false;
                 CheckerboardController.Instance.GameStatus = eGameStatus.ContinueGame;
+
             }
             else
             {
@@ -350,14 +353,20 @@
 
         private void removeAllSolidersFromBord()
         {
-            foreach (Control c in this.Controls)
+            List<int> list = new List<int>();
+            for (int i=0;i<this.Controls.Count;i++)
             {
-                OvalPictureBox currentSolider = c as OvalPictureBox;
-                if (currentSolider != null)
+                OvalPictureBox currentSolider = Controls[i] as OvalPictureBox;
+                if(currentSolider!=null)
                 {
-                    this.Controls.Remove(c);
+                    list.Add(i);
                 }
             }
+            foreach(int i in list)
+            {
+                this.Controls.RemoveAt(i);
+            }
+
         }
 
         private void updateScoreInsideLabels()
