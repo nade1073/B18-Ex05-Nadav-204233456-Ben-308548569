@@ -55,7 +55,7 @@
 
         private void CheckerBoardForm_Click(object sender, EventArgs e)
         {
-            if (m_IsChooseSolider)
+            if (m_IsChooseSolider && m_IsSoliderIsMovingRightNow==false)
             {
                 removeBorderFromSoliderThatHaveBeenChosen();
                 m_IsChooseSolider = false;
@@ -309,6 +309,7 @@
         {
             Control[] soliderToMove = this.Controls.Find(String.Format("{0}{1}", m_CurrentMove.FromSquare.ToString(), k_SoliderPicName), false);
             soliderToMove[0].Invalidate();
+            this.m_IsChooseSolider = false;
         }
 
 		private void gameStatusChangeMessage(eGameStatus i_CurrentGameStatus)
@@ -410,7 +411,7 @@
 				PictureBox currentSquare = i_Sender as PictureBox;            
 				TagName currentPositionOfCurrentSolider = currentSquare.Tag as TagName;
 				this.m_CurrentMove.ToSquare = new Square(currentPositionOfCurrentSolider.Name[1], currentPositionOfCurrentSolider.Name[0]);
-				CheckerboardController.Instance.nextTurn(m_CurrentMove);
+                CheckerboardController.Instance.nextTurn(m_CurrentMove);
 				if (CheckerboardController.Instance.GameStatus != eGameStatus.ContinueGame)
 				{
 					await Task.Delay(2000);
@@ -431,8 +432,6 @@
 
 					}
 				} 
-
-                this.m_IsChooseSolider = false;
             }
         }
 
